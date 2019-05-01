@@ -16,6 +16,7 @@
     "react": "^16.3.2",
     "react-bootstrap-table": "^4.3.1",
     "react-bootstrap-tabs": "^1.0.2",
+    "react-burger-menu": "^2.6.10",
     "react-chartjs-2": "^2.7.0",
     "react-checkbox-group": "^4.0.1",
     "react-datepicker": "^1.4.1",

@@ -1,19 +1,20 @@
 /* App.js */
 
 import React, { Component } from 'react';
-import Chart from './../componentes/chart.js'
-import Fecha from './../componentes/fecha.js'
-import BtnExport from './../componentes/btn-export';
-import Tabla from './../componentes/tabla';
+import './DemandaSocial.css';
+import Chart from './../../componentes/chart.js'
+import Fecha from './../../componentes/fecha.js'
+import BtnExport from './../../componentes/btn-export';
+import Tabla from './../../componentes/tabla';
 import {Tabs, Tab} from 'react-bootstrap-tabs';
-import ToolTipPosition from "./../componentes/ToolTipPositions";
-import SelectGrafica from "./../componentes/selectForGrafica";
-import SelectYear from "./../componentes/selectYear";
-import SelectMonth from "./../componentes/selectMonth";
-import CanvasJSReact, {CanvasJS} from './../canvasjs.react';
+import ToolTipPosition from "./../../componentes/ToolTipPositions";
+import SelectGrafica from "./../../componentes/selectForGrafica";
+import SelectYear from "./../../componentes/selectYear";
+import SelectMonth from "./../../componentes/selectMonth";
+import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-class Movilidad extends Component {
+class DemandaSocial extends Component {
 
     constructor(){//constructor inicial
         super();
@@ -61,59 +62,30 @@ class Movilidad extends Component {
             return response.json();
         })
         .then((result)=>{
+            // result['datasets'][0]['backgroundColor'] = 'rgba(54, 162, 235, 0.6)';
 
-            //console.log(result);
+            // const chartData1=[];
+
+            // for(var i in result.labels)
+            // {
+            //     this.setState({
+            //         listaConceptosEncontrados : (this.state.listaConceptosEncontrados + result['labels'][i]+", ")
+            //     })
+            //   chartData1.push({
+            //     label: result['labels'][i],
+            //     value: result['datasets'][0]['data'][i]
+            //   });
+            // }
+
+            console.log(result);
             this.setState({
                 isChartLoaded : true,
                 data: {
-                    animationEnabled: true, 
-                    title:{
-                        text: "Movilidad Alumnos vs Movilidad Docentes"
-                    },
-                    axisY : {
-                        title: "Número de Personas",
-                        includeZero: false
-                    },
-                    toolTip: {
-                        shared: true
-                    },
-                    data: [{
-                        type: "spline",
-                        name: "Alumnos",
-                        showInLegend: true,
-                        dataPoints: [
-                            { y: 155, label: "2009" },
-                            { y: 150, label: "2010" },
-                            { y: 152, label: "2011" },
-                            { y: 148, label: "2012" },
-                            { y: 142, label: "2013" },
-                            { y: 150, label: "2014" },
-                            { y: 146, label: "2015" },
-                            { y: 149, label: "2016" },
-                            { y: 153, label: "2017" },
-                            { y: 158, label: "2018" },
-                            { y: 154, label: "2018-2" }
-                        ]
-                    },
-                    {
-                        type: "spline",
-                        name: "Docentes",
-                        showInLegend: true,
-                        dataPoints: [
-                            { y: 172, label: "2009" },
-                            { y: 173, label: "2010" },
-                            { y: 175, label: "2011" },
-                            { y: 172, label: "2012" },
-                            { y: 162, label: "2013" },
-                            { y: 165, label: "2014" },
-                            { y: 172, label: "2015" },
-                            { y: 168, label: "2016" },
-                            { y: 175, label: "2017" },
-                            { y: 170, label: "2018" },
-                            { y: 165, label: "2018-2" }
-                        ]
-                    }]
-                }
+            title: {
+                text: "Demanda Social"
+            },
+            data: result
+        }
             });
         })
     }
@@ -122,10 +94,22 @@ class Movilidad extends Component {
         
         return (
         <div>
-            <button onClick={this.miFuncion}>Movilidad</button>
+            <button onClick={this.miFuncion}>Demanda Social</button>
             <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
         </div>
         );
     }
 }
-export default Movilidad;
+export default DemandaSocial;
+
+/*
+
+    { label: "DSI",  y: 0  },
+    { label: "GTIC", y: 15  },
+    { label: "ISW", y: 74  },
+    { label: "DGTI", y: 74  },
+    { label: "GIC",  y: 0  },
+    { label: "GTI",  y: 0  },
+    { label: "GPTI",  y: 0  },
+    { label: "ASTI",  y: 0  }
+*/
