@@ -56,7 +56,7 @@ class Index extends Component {
                                     </select>
                                 </div>
                                 
-                                <button className="btn btn-success btn-block" onClick={this.handleApretarBoton}><Link to="/" className="btn btn-success btn-block" >Demanda Social</Link></button>
+                                <button className="btn btn-success btn-block" onClick={this.handleApretarBoton}><Link to="/" className="btn btn-success btn-block" >Generar Gráfica</Link></button>
                             </Tab>
                         </Tabs>
                     </div>

@@ -52,7 +52,7 @@ class DemandaSocial extends Component {
             data: {}
         };
         this.miFuncion = this.miFuncion.bind(this);
-
+        this.miFuncion();
     }
 
 
@@ -94,7 +94,6 @@ class DemandaSocial extends Component {
         
         return (
         <div>
-            <button onClick={this.miFuncion}>Demanda Social</button>
             <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
         </div>
         );

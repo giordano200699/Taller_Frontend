@@ -51,6 +51,7 @@ class Movilidad extends Component {
             data: {}
         };
         this.miFuncion = this.miFuncion.bind(this);
+        this.miFuncion();
 
     }
 
@@ -121,8 +122,8 @@ class Movilidad extends Component {
     render() {
         
         return (
+
         <div>
-            <button onClick={this.miFuncion}>Movilidad</button>
             <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
         </div>
         );
