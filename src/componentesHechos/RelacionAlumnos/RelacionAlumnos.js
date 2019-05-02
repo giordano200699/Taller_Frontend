@@ -1,20 +1,19 @@
 /* App.js */
 
 import React, { Component } from 'react';
-import './App.css';
-import Chart from './componentes/chart.js'
-import Fecha from './componentes/fecha.js'
-import BtnExport from './componentes/btn-export';
-import Tabla from './componentes/tabla';
+import Chart from './../../componentes/chart.js'
+import Fecha from './../../componentes/fecha.js'
+import BtnExport from './../../componentes/btn-export';
+import Tabla from './../../componentes/tabla';
 import {Tabs, Tab} from 'react-bootstrap-tabs';
-import ToolTipPosition from "./componentes/ToolTipPositions";
-import SelectGrafica from "./componentes/selectForGrafica";
-import SelectYear from "./componentes/selectYear";
-import SelectMonth from "./componentes/selectMonth";
-import CanvasJSReact, {CanvasJS} from './canvasjs.react';
+import ToolTipPosition from "./../../componentes/ToolTipPositions";
+import SelectGrafica from "./../../componentes/selectForGrafica";
+import SelectYear from "./../../componentes/selectYear";
+import SelectMonth from "./../../componentes/selectMonth";
+import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-class App extends Component {
+class RelacionAlumnos extends Component {
 
     constructor(){//constructor inicial
         super();
@@ -52,6 +51,7 @@ class App extends Component {
             data: {}
         };
         this.miFuncion = this.miFuncion.bind(this);
+        this.miFuncion();
 
     }
 
@@ -62,30 +62,32 @@ class App extends Component {
             return response.json();
         })
         .then((result)=>{
-            // result['datasets'][0]['backgroundColor'] = 'rgba(54, 162, 235, 0.6)';
 
-            // const chartData1=[];
-
-            // for(var i in result.labels)
-            // {
-            //     this.setState({
-            //         listaConceptosEncontrados : (this.state.listaConceptosEncontrados + result['labels'][i]+", ")
-            //     })
-            //   chartData1.push({
-            //     label: result['labels'][i],
-            //     value: result['datasets'][0]['data'][i]
-            //   });
-            // }
-
-            console.log(result);
+            //console.log(result);
             this.setState({
                 isChartLoaded : true,
                 data: {
-            title: {
-                text: "Demanda Social"
-            },
-            data: result
-        }
+                    exportEnabled: true,
+                    animationEnabled: true,
+                    title: {
+                        text: "Relación Alumnos"
+                    },
+                    data: [{
+                        type: "pie",
+                        startAngle: 75,
+                        toolTipContent: "<b>{label}</b>: {y}%",
+                        showInLegend: "true",
+                        legendText: "{label}",
+                        indexLabelFontSize: 16,
+                        indexLabel: "{label} - {y}%",
+                        dataPoints: [
+                            { y: 50, label: "Ingresantes" },
+                            { y: 27, label: "Abandonos" },
+                            { y: 19, label: "Egresados" },
+                            { y: 5, label: "Graduados" },
+                        ]
+                    }]
+                }
             });
         })
     }
@@ -93,23 +95,11 @@ class App extends Component {
     render() {
         
         return (
+
         <div>
-            <button onClick={this.miFuncion}>Demanda Social</button>
             <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
         </div>
         );
     }
 }
-export default App;
-
-/*
-
-    { label: "DSI",  y: 0  },
-    { label: "GTIC", y: 15  },
-    { label: "ISW", y: 74  },
-    { label: "DGTI", y: 74  },
-    { label: "GIC",  y: 0  },
-    { label: "GTI",  y: 0  },
-    { label: "GPTI",  y: 0  },
-    { label: "ASTI",  y: 0  }
-*/
+export default RelacionAlumnos;

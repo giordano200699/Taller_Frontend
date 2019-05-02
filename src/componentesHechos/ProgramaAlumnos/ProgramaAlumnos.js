@@ -1,20 +1,19 @@
 /* App.js */
 
 import React, { Component } from 'react';
-import './App.css';
-import Chart from './componentes/chart.js'
-import Fecha from './componentes/fecha.js'
-import BtnExport from './componentes/btn-export';
-import Tabla from './componentes/tabla';
+import Chart from './../../componentes/chart.js'
+import Fecha from './../../componentes/fecha.js'
+import BtnExport from './../../componentes/btn-export';
+import Tabla from './../../componentes/tabla';
 import {Tabs, Tab} from 'react-bootstrap-tabs';
-import ToolTipPosition from "./componentes/ToolTipPositions";
-import SelectGrafica from "./componentes/selectForGrafica";
-import SelectYear from "./componentes/selectYear";
-import SelectMonth from "./componentes/selectMonth";
-import CanvasJSReact, {CanvasJS} from './canvasjs.react';
+import ToolTipPosition from "./../../componentes/ToolTipPositions";
+import SelectGrafica from "./../../componentes/selectForGrafica";
+import SelectYear from "./../../componentes/selectYear";
+import SelectMonth from "./../../componentes/selectMonth";
+import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-class App extends Component {
+class ProgramaAlumnos extends Component {
 
     constructor(){//constructor inicial
         super();
@@ -52,6 +51,7 @@ class App extends Component {
             data: {}
         };
         this.miFuncion = this.miFuncion.bind(this);
+        this.miFuncion();
 
     }
 
@@ -62,30 +62,59 @@ class App extends Component {
             return response.json();
         })
         .then((result)=>{
-            // result['datasets'][0]['backgroundColor'] = 'rgba(54, 162, 235, 0.6)';
 
-            // const chartData1=[];
-
-            // for(var i in result.labels)
-            // {
-            //     this.setState({
-            //         listaConceptosEncontrados : (this.state.listaConceptosEncontrados + result['labels'][i]+", ")
-            //     })
-            //   chartData1.push({
-            //     label: result['labels'][i],
-            //     value: result['datasets'][0]['data'][i]
-            //   });
-            // }
-
-            console.log(result);
+            //console.log(result);
             this.setState({
                 isChartLoaded : true,
                 data: {
-            title: {
-                text: "Demanda Social"
-            },
-            data: result
-        }
+                    title: {
+                        text: "Programa Alumnos"
+                    },
+                    data: [
+                    {
+                        // Change type to "doughnut", "line", "splineArea", etc.
+                        type: "column",
+                        dataPoints: [
+                            { label: "DSI",  y: 38  },
+                            { label: "GTIC", y: 41  },
+                            { label: "ISW", y: 32  },
+                            { label: "DGTI", y: 29  },
+                            { label: "GIC",  y: 33  },
+                            { label: "GTI",  y: 30  },
+                            { label: "GPTI",  y: 46  },
+                            { label: "ASTI",  y: 42  }
+                        ]
+                    },
+                    {
+                        // Change type to "doughnut", "line", "splineArea", etc.
+                        type: "column",
+                        dataPoints: [
+                            { label: "DSI",  y: 17  },
+                            { label: "GTIC", y: 22  },
+                            { label: "ISW", y: 17  },
+                            { label: "DGTI", y: 12  },
+                            { label: "GIC",  y: 15  },
+                            { label: "GTI",  y: 11  },
+                            { label: "GPTI",  y: 28  },
+                            { label: "ASTI",  y: 20  }
+                        ]
+                    },
+                    {
+                        // Change type to "doughnut", "line", "splineArea", etc.
+                        type: "column",
+                        dataPoints: [
+                            { label: "DSI",  y: 9  },
+                            { label: "GTIC", y: 11  },
+                            { label: "ISW", y: 7  },
+                            { label: "DGTI", y: 4  },
+                            { label: "GIC",  y: 9  },
+                            { label: "GTI",  y: 9  },
+                            { label: "GPTI",  y: 7  },
+                            { label: "ASTI",  y: 12  }
+                        ]
+                    }
+                    ]
+                }
             });
         })
     }
@@ -93,14 +122,15 @@ class App extends Component {
     render() {
         
         return (
+
         <div>
-            <button onClick={this.miFuncion}>Demanda Social</button>
             <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
         </div>
         );
     }
 }
-export default App;
+export default ProgramaAlumnos;
+
 
 /*
 

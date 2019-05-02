@@ -57,7 +57,7 @@ class DemandaSocial extends Component {
 
 
     miFuncion(){
-        fetch('http://localhost:8888/back-estadisticas/ApiController/listaConceptos')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })
