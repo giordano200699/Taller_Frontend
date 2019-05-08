@@ -12,6 +12,7 @@ import SelectGrafica from "./../../componentes/selectForGrafica";
 import SelectYear from "./../../componentes/selectYear";
 import SelectMonth from "./../../componentes/selectMonth";
 import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
+import Parser from 'html-react-parser';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class DemandaSocial extends Component {
@@ -49,7 +50,8 @@ class DemandaSocial extends Component {
             todosConceptos : [], //usado para saber todos los conceptos que hay en la BD en otro tipo formato de dato
             usuario : '', //usado para la sesion del usuario
             listaConceptosEncontrados : "", //usado para saber que conceptos se encontraron en la consulta,
-            data: {}
+            data: {},
+            miHtml : ''
         };
         this.miFuncion = this.miFuncion.bind(this);
         this.miFuncion();
@@ -77,7 +79,6 @@ class DemandaSocial extends Component {
             //   });
             // }
 
-            console.log(result);
             this.setState({
                 isChartLoaded : true,
                 data: {
@@ -88,12 +89,105 @@ class DemandaSocial extends Component {
         }
             });
         })
+
+        fetch('http://localhost:8888/back-estadisticas/ApiController/demandaSocial')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        .then((response)=>{
+            return response.json();
+        })
+        .then((result)=>{
+            //result = JSON.parse(result);
+
+            console.log(result);
+            let cadena="";
+            var totalD=0;
+            var totalA = [];
+            var bandera=false;
+            for(var i in result) {
+                if(bandera==false){
+                    bandera=true;
+                    for(var j in result[i]){
+                        totalA[j]=0;
+                    }
+                }
+                totalD=0;
+               cadena = cadena + "<tr><td>"+i+"</td>";
+               for(var j in result[i]){
+                if(result[i][j]==0){
+                    cadena = cadena+"<td></td>";
+                }else{
+                    cadena = cadena+"<td>"+result[i][j]+"</td>";
+                    totalD = totalD + result[i][j];
+                    totalA[j]=totalA[j]+result[i][j];
+                }
+                
+               }
+               cadena = cadena + "<td>"+totalD+"</td></tr>";
+               //"</tr>";
+            }
+            this.setState({
+                miHtml: cadena
+            });
+        })
     }
 
     render() {
         
         return (
+
         <div>
+            <p>DISI: Doctorado en Ingeniería de Sistemas e Informática </p>
+
+            <table className="table table-bordered">
+                <thead>
+                    <tr>
+                      <th>Etiquetas</th>
+                      <th>2002</th>
+                      <th>2003</th>
+                      <th>2004</th>
+                      <th>2005</th>
+                      <th>2006</th>
+                      <th>2007</th>
+                      <th>2008</th>
+                      <th>2009</th>
+                      <th>2010</th>
+                      <th>2011</th>
+                      <th>2012</th>
+                      <th>2013</th>
+                      <th>2014</th>
+                      <th>2015</th>
+                      <th>2016</th>
+                      <th>2017</th>
+                      <th>2018</th>
+                      <th>Total General</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Parser(this.state.miHtml)}
+                    
+                    <tr>
+                      <td>Total General</td>
+                      <td>20</td>
+                      <td>30</td>
+                      <td>40</td>
+                      <td>50</td>
+                      <td>60</td>
+                      <td>70</td>
+                      <td>80</td>
+                      <td>90</td>
+                      <td>100</td>
+                      <td>101</td>
+                      <td>120</td>
+                      <td>103</td>
+                      <td>140</td>
+                      <td>150</td>
+                      <td>160</td>
+                      <td>170</td>
+                      <td>180</td>
+                      <td>1110</td>
+                    </tr>
+                  </tbody>
+            </table>
+
             <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
         </div>
         );
