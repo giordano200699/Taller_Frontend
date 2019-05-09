@@ -11,6 +11,7 @@ import SelectGrafica from "./../../componentes/selectForGrafica";
 import SelectYear from "./../../componentes/selectYear";
 import SelectMonth from "./../../componentes/selectMonth";
 import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
+import Parser from 'html-react-parser';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class Movilidad extends Component {
@@ -48,7 +49,10 @@ class Movilidad extends Component {
             todosConceptos : [], //usado para saber todos los conceptos que hay en la BD en otro tipo formato de dato
             usuario : '', //usado para la sesion del usuario
             listaConceptosEncontrados : "", //usado para saber que conceptos se encontraron en la consulta,
-            data: {}
+            data: {},
+            poblacionEstudiantil : [],
+            miHtml: '',
+            miHtml2: ''
         };
         this.miFuncion = this.miFuncion.bind(this);
         this.miFuncion();
@@ -57,7 +61,8 @@ class Movilidad extends Component {
 
 
     miFuncion(){
-        fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+
+        fetch('http://tallerbackend.herokuapp.com/ApiController/poblacionEstudiantil')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })
@@ -65,7 +70,57 @@ class Movilidad extends Component {
 
             //console.log(result);
             this.setState({
+                poblacionEstudiantil : result,
+            });
+        });
+
+        fetch('http://tallerbackend.herokuapp.com/ApiController/poblacionDocente')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        .then((response)=>{
+            return response.json();
+        })
+        .then((result)=>{
+
+            var primerAnio = parseInt(result[0]["date_part"]);
+            var arreglo =[];
+            var arreglo2 =[];
+            var total = [];
+            var total2 = [];
+            var cadena = '<th>Año</th>';
+            var cadena2 = '<td>Alumnos</td>';
+            var cadena3 = '<td>Docentes</td>';
+
+            for (var i = primerAnio;i<=2018;i++){
+                arreglo[""+i]=0;
+                arreglo2[""+i]=0;
+                cadena = cadena + '<th>'+i+'</th>';
+            }
+
+            for(var i in this.state.poblacionEstudiantil){
+                if(this.state.poblacionEstudiantil[i]["anio_ingreso"]!='2018-2'){
+                    arreglo[this.state.poblacionEstudiantil[i]["anio_ingreso"]] = parseInt(this.state.poblacionEstudiantil[i]["count"]);
+
+                }
+            }
+
+            for(var i in result){
+                arreglo2[result[i]["date_part"]] = parseInt(result[i]["count"]);
+            }
+
+            console.log(arreglo2);
+
+            for(var i in arreglo){
+                total.push({y:arreglo[i],label:""+i});
+                total2.push({y:arreglo2[i],label:""+i});
+                cadena2 = cadena2 + '<td>'+arreglo[i]+'</td>';
+                cadena3 = cadena3 + '<td>'+arreglo2[i]+'</td>';
+            }
+
+
+            //console.log(result);
+            this.setState({
                 isChartLoaded : true,
+                miHtml:cadena,
+                miHtml2:'<tr>'+cadena2+'</tr><tr>'+cadena3+'</tr>',
                 data: {
                     animationEnabled: true, 
                     title:{
@@ -82,37 +137,13 @@ class Movilidad extends Component {
                         type: "spline",
                         name: "Alumnos",
                         showInLegend: true,
-                        dataPoints: [
-                            { y: 155, label: "2009" },
-                            { y: 150, label: "2010" },
-                            { y: 152, label: "2011" },
-                            { y: 148, label: "2012" },
-                            { y: 142, label: "2013" },
-                            { y: 150, label: "2014" },
-                            { y: 146, label: "2015" },
-                            { y: 149, label: "2016" },
-                            { y: 153, label: "2017" },
-                            { y: 158, label: "2018" },
-                            { y: 154, label: "2018-2" }
-                        ]
+                        dataPoints: total
                     },
                     {
                         type: "spline",
                         name: "Docentes",
                         showInLegend: true,
-                        dataPoints: [
-                            { y: 172, label: "2009" },
-                            { y: 173, label: "2010" },
-                            { y: 175, label: "2011" },
-                            { y: 172, label: "2012" },
-                            { y: 162, label: "2013" },
-                            { y: 165, label: "2014" },
-                            { y: 172, label: "2015" },
-                            { y: 168, label: "2016" },
-                            { y: 175, label: "2017" },
-                            { y: 170, label: "2018" },
-                            { y: 165, label: "2018-2" }
-                        ]
+                        dataPoints: total2
                     }]
                 }
             });
@@ -122,10 +153,38 @@ class Movilidad extends Component {
     render() {
         
         return (
+            <div>
+                <Tabs align="center" >
+                    <Tab label="Tabla">
+                        <div class="panel row align-items-center">
+                            <div class="panel-heading mt-3 mb-3">
+                                <h4 class="panel-title">Tabla de Demanda Social</h4>
+                            </div>
+                            <table className="table table-bordered table-striped col-md-11 mr-md-auto">
+                                <thead>
+                                    <tr>
+                                        {Parser(this.state.miHtml)}  
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        {Parser(this.state.miHtml2)}  
+                                </tbody>
+                            </table>          
+                        </div>
+                    </Tab>
+                    <Tab label="Grafico">
+                    <div class="panel row align-items-center">
+                        <div class="panel-heading mt-3 mb-3">
+                            <h4 class="panel-title">Grafica de Demanda Social</h4>
+                        </div>
+                        <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
+                            <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
+                        </div>           
+                    </div>
+                    </Tab>
+                </Tabs>
+            </div>
 
-        <div>
-            <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
-        </div>
         );
     }
 }
