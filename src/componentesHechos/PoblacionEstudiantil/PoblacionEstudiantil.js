@@ -11,6 +11,7 @@ import SelectGrafica from "./../../componentes/selectForGrafica";
 import SelectYear from "./../../componentes/selectYear";
 import SelectMonth from "./../../componentes/selectMonth";
 import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
+import Parser from 'html-react-parser';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class PoblacionEstudiantil extends Component {
@@ -48,7 +49,9 @@ class PoblacionEstudiantil extends Component {
             todosConceptos : [], //usado para saber todos los conceptos que hay en la BD en otro tipo formato de dato
             usuario : '', //usado para la sesion del usuario
             listaConceptosEncontrados : "", //usado para saber que conceptos se encontraron en la consulta,
-            data: {}
+            data: {},
+            miHtml: '',
+            miHtml2:''
         };
         this.miFuncion = this.miFuncion.bind(this);
         this.miFuncion();
@@ -57,13 +60,26 @@ class PoblacionEstudiantil extends Component {
 
 
     miFuncion(){
-        fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        fetch('http://tallerbackend.herokuapp.com/ApiController/poblacionEstudiantil')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })
         .then((result)=>{
 
             //console.log(result);
+
+            var arregloDatos = [];
+            var cadena1 = '<tr><th>Año</th>';
+            var cadena2 = '<tr><td>Total</td>';
+
+            for(var i in result){
+                arregloDatos.push({y:parseInt(result[i]["count"]),label:result[i]["anio_ingreso"]});
+                cadena1 = cadena1 + '<th>'+result[i]["anio_ingreso"]+'</th>';
+                cadena2 = cadena2 + '<td>'+result[i]["count"]+'</td>';
+            }
+            cadena1 = cadena1 + '</tr>';
+            cadena2 = cadena2 + '</tr>';
+
             this.setState({
                 isChartLoaded : true,
                 data: {
@@ -80,23 +96,13 @@ class PoblacionEstudiantil extends Component {
                     },
                     data: [{
                         type: "spline",
-                        name: "2016",
+                        name: "Población Estudiantil",
                         showInLegend: true,
-                        dataPoints: [
-                            { y: 155, label: "2009" },
-                            { y: 150, label: "2010" },
-                            { y: 152, label: "2011" },
-                            { y: 148, label: "2012" },
-                            { y: 142, label: "2013" },
-                            { y: 150, label: "2014" },
-                            { y: 146, label: "2015" },
-                            { y: 149, label: "2016" },
-                            { y: 153, label: "2017" },
-                            { y: 158, label: "2018" },
-                            { y: 154, label: "2018-2" }
-                        ]
+                        dataPoints: arregloDatos
                     }]
-                }
+                },
+                miHtml:cadena1,
+                miHtml2:cadena2
             });
         })
     }
@@ -104,10 +110,36 @@ class PoblacionEstudiantil extends Component {
     render() {
         
         return (
+            <div>
+                <Tabs align="center" >
+                    <Tab label="Tabla">
+                        <div class="panel row align-items-center">
+                            <div class="panel-heading mt-3 mb-3">
+                                <h4 class="panel-title">Tabla de Demanda Social</h4>
+                            </div>
+                            <table className="table table-bordered table-striped col-md-11 mr-md-auto">
+                                <thead>
+                                    {Parser(this.state.miHtml)}  
+                                </thead>
+                                <tbody>
+                                    {Parser(this.state.miHtml2)}                            
+                                </tbody>
+                            </table>          
+                        </div>
+                    </Tab>
+                    <Tab label="Grafico">
+                    <div class="panel row align-items-center">
+                        <div class="panel-heading mt-3 mb-3">
+                            <h4 class="panel-title">Grafica de Demanda Social</h4>
+                        </div>
+                        <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
+                            <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
+                        </div>           
+                    </div>
+                    </Tab>
+                </Tabs>
+            </div>
 
-        <div>
-            <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
-        </div>
         );
     }
 }
