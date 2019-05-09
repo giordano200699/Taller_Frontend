@@ -5,6 +5,7 @@ import {Tabs, Tab} from 'react-bootstrap-tabs';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import DemandaSocial from './../DemandaSocial/DemandaSocial';
 import Movilidad from './../Movilidad/Movilidad';
+import SelectGrafica from "./../../componentes/selectForGrafica";
 import RelacionAlumnos from './../RelacionAlumnos/RelacionAlumnos';
 import ProgramaAlumnos from './../ProgramaAlumnos/ProgramaAlumnos';
 import PoblacionEstudiantil from './../PoblacionEstudiantil/PoblacionEstudiantil';
@@ -55,7 +56,7 @@ class Index extends Component {
 
             <Router>
                 <div className="row">
-                    <div className="panel col-md-3">
+                    <div className="panel col-md-2">
                         <Tabs align="center" >
                             <Tab label="Datos" className="panelDibujado">
                                 <div className="form-group">
@@ -88,9 +89,17 @@ class Index extends Component {
                                 
                                 <button className="btn btn-success btn-block" onClick={this.handleApretarBoton}><Link to="/" className="btn btn-success btn-block" >Generar Gráfica</Link></button>
                             </Tab>
+                            <Tab label="Grafica">
+                                        {/*<div className="example-warper">*/}
+                                        <div className="panelDibujado">
+                                            <form className="opciones-formulario" onSubmit={this.onClickPreventDefault}>
+                                                <SelectGrafica grafico={this.state.grafico} grad={this.state.grad} colores={this.state.colores} cambioGrafico={this.handleChangeGrafico} cambioGrad={this.handleChangeGrad} cambioColores={this.handleChangeColores}/>
+                                            </form>
+                                        </div>
+                            </Tab>
                         </Tabs>
                     </div>
-                    <div className="panel col-md-9">
+                    <div className="panel col-md-10">
                         <Route path='/demandaSocial' component={DemandaSocial} />
                         <Route path='/movilidad' component={Movilidad} />
                         <Route path='/' component={miFuncion} />

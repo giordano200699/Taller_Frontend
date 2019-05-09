@@ -134,61 +134,76 @@ class DemandaSocial extends Component {
         
         return (
 
-        <div>
-            <p>DISI: Doctorado en Ingeniería de Sistemas e Informática </p>
-
-            <table className="table table-bordered">
-                <thead>
-                    <tr>
-                      <th>Etiquetas</th>
-                      <th>2002</th>
-                      <th>2003</th>
-                      <th>2004</th>
-                      <th>2005</th>
-                      <th>2006</th>
-                      <th>2007</th>
-                      <th>2008</th>
-                      <th>2009</th>
-                      <th>2010</th>
-                      <th>2011</th>
-                      <th>2012</th>
-                      <th>2013</th>
-                      <th>2014</th>
-                      <th>2015</th>
-                      <th>2016</th>
-                      <th>2017</th>
-                      <th>2018</th>
-                      <th>Total General</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Parser(this.state.miHtml)}
-                    
-                    <tr>
-                      <td>Total General</td>
-                      <td>20</td>
-                      <td>30</td>
-                      <td>40</td>
-                      <td>50</td>
-                      <td>60</td>
-                      <td>70</td>
-                      <td>80</td>
-                      <td>90</td>
-                      <td>100</td>
-                      <td>101</td>
-                      <td>120</td>
-                      <td>103</td>
-                      <td>140</td>
-                      <td>150</td>
-                      <td>160</td>
-                      <td>170</td>
-                      <td>180</td>
-                      <td>1110</td>
-                    </tr>
-                  </tbody>
-            </table>
-
-            <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
+            <div>
+            <Tabs align="center" >
+                <Tab label="Tabla">
+                    <div class="panel row align-items-center">
+                        <div class="panel-heading mt-3 mb-3">
+                            <h4 class="panel-title">Tabla de Demanda Social</h4>
+                        </div>
+                        <table className="table table-bordered table-striped col-md-11 mr-md-auto">
+                            <thead>
+                                <tr>
+                                    <th>Etiquetas</th>
+                                    <th>2002</th>
+                                    <th>2003</th>
+                                    <th>2004</th>
+                                    <th>2005</th>
+                                    <th>2006</th>
+                                    <th>2007</th>
+                                    <th>2008</th>
+                                    <th>2009</th>
+                                    <th>2010</th>
+                                    <th>2011</th>
+                                    <th>2012</th>
+                                    <th>2013</th>
+                                    <th>2014</th>
+                                    <th>2015</th>
+                                    <th>2016</th>
+                                    <th>2017</th>
+                                    <th>2018</th>
+                                    <th>Total General</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Parser(this.state.miHtml)}                                
+                                <tr>
+                                    <td>Total General</td>
+                                    <td>20</td>
+                                    <td>30</td>
+                                    <td>40</td>
+                                    <td>50</td>
+                                    <td>60</td>
+                                    <td>70</td>
+                                    <td>80</td>
+                                    <td>90</td>
+                                    <td>100</td>
+                                    <td>101</td>
+                                    <td>120</td>
+                                    <td>103</td>
+                                    <td>140</td>
+                                    <td>150</td>
+                                    <td>160</td>
+                                    <td>170</td>
+                                    <td>180</td>
+                                    <td>1110</td>
+                                </tr>                         
+                            </tbody>
+                        </table>          
+                    </div>
+                </Tab>
+                <Tab label="Grafico">
+                <div class="panel row align-items-center">
+                    <div class="panel-heading mt-3 mb-3">
+                        <h4 class="panel-title">Grafica de Demanda Social</h4>
+                    </div>
+                    <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
+                        <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
+                    </div>           
+                </div>
+                </Tab>
+            </Tabs>
+            {/*<p>DISI: Doctorado en Ingeniería de Sistemas e Informática </p>*/}
         </div>
         );
     }

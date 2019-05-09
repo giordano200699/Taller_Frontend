@@ -43,3 +43,19 @@ form label{
 form input{
     text-align: left;
 }
+
+.marco{
+  border-radius: 20px 20px 20px 20px;
+  -moz-border-radius: 20px 20px 20px 20px;
+  -webkit-border-radius: 20px 20px 20px 20px;
+  border: 3px groove #0bba14;
+}
+
+th{
+  font-size: 13px;
+}
+
+td{
+  font-size: 12px;
+}
+
