@@ -102,6 +102,7 @@ class DemandaSocial extends Component {
             var totalD=0;
             var totalA = [];
             var bandera=false;
+            var totalTotal=0;
             for(var i in result) {
                 if(bandera==false){
                     bandera=true;
@@ -122,8 +123,14 @@ class DemandaSocial extends Component {
                 
                }
                cadena = cadena + "<td>"+totalD+"</td></tr>";
+               totalTotal= totalTotal + totalD;
                //"</tr>";
             }
+            cadena = cadena + "<tr><td>Total General</td>";
+            for(var i in totalA){
+                cadena = cadena+"<td>"+totalA[i]+"</td>";
+            }
+            cadena = cadena + "<td>"+totalTotal+"</td></tr>";
             this.setState({
                 miHtml: cadena
             });
@@ -166,28 +173,7 @@ class DemandaSocial extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {Parser(this.state.miHtml)}                                
-                                <tr>
-                                    <td>Total General</td>
-                                    <td>20</td>
-                                    <td>30</td>
-                                    <td>40</td>
-                                    <td>50</td>
-                                    <td>60</td>
-                                    <td>70</td>
-                                    <td>80</td>
-                                    <td>90</td>
-                                    <td>100</td>
-                                    <td>101</td>
-                                    <td>120</td>
-                                    <td>103</td>
-                                    <td>140</td>
-                                    <td>150</td>
-                                    <td>160</td>
-                                    <td>170</td>
-                                    <td>180</td>
-                                    <td>1110</td>
-                                </tr>                         
+                                {Parser(this.state.miHtml)}                                  
                             </tbody>
                         </table>          
                     </div>
