@@ -11,7 +11,9 @@ import SelectGrafica from "./../../componentes/selectForGrafica";
 import SelectYear from "./../../componentes/selectYear";
 import SelectMonth from "./../../componentes/selectMonth";
 import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
+import Parser from 'html-react-parser';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
 
 class RelacionAlumnos extends Component {
 
@@ -48,7 +50,8 @@ class RelacionAlumnos extends Component {
             todosConceptos : [], //usado para saber todos los conceptos que hay en la BD en otro tipo formato de dato
             usuario : '', //usado para la sesion del usuario
             listaConceptosEncontrados : "", //usado para saber que conceptos se encontraron en la consulta,
-            data: {}
+            data: {},
+            miHtml: ''
         };
         this.miFuncion = this.miFuncion.bind(this);
         this.miFuncion();
@@ -57,13 +60,57 @@ class RelacionAlumnos extends Component {
 
 
     miFuncion(){
-        fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        fetch('http://tallerbackend.herokuapp.com/ApiController/relacionAlumnos')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })
         .then((result)=>{
 
             //console.log(result);
+
+            var arregloDatos = [];
+            var suma=0;
+            var cadena = '';
+            for(var i in result){
+                suma= suma+parseInt(result[i]["count"]);
+            }
+            for(var i in result){
+                cadena= cadena+'<tr>';
+                cadena= cadena+'<td>'+result[i]["cod_perm"]+'</td>';
+                switch(result[i]["cod_perm"]){
+                    case 'AC':
+                        cadena= cadena+'<td>Activo</td>';
+                        break;
+                    case 'G':
+                        cadena= cadena+'<td>Graduado</td>';
+                        break;
+                    case 'X':
+                        cadena= cadena+'<td>Expulsado</td>';
+                        break;
+                    case 'RM':
+                        cadena= cadena+'<td>Reserva</td>';
+                        break;
+                    case 'INAC':
+                        cadena= cadena+'<td>Inactivo</td>';
+                        break;
+                    case 'AI':
+                        cadena= cadena+'<td>Ingreso Anulado</td>';
+                        break;
+                    case 'E':
+                        cadena= cadena+'<td>Egresado</td>';
+                        break;
+                    case 'A':
+                        cadena= cadena+'<td>Abandono</td>';
+                        break; 
+                }
+                cadena= cadena+'<td>'+parseInt(result[i]["count"])+'</td>';
+                cadena= cadena+'<td>'+Math.round((parseInt(result[i]["count"])/suma)*10000)/10000+'</td>';
+                cadena= cadena+'<td>'+Math.round((parseInt(result[i]["count"])/suma)*10000)/100+'%</td>';
+                arregloDatos.push({y:parseInt(result[i]["count"]),label:result[i]["cod_perm"],porcentaje:Math.round((parseInt(result[i]["count"])/suma)*10000)/100});
+                cadena= cadena+'</tr>';
+            }
+            cadena= cadena+'<tr><td>Total</td><td>Total</td><td>'+suma+'</td><td>1</td><td>100%</td></tr>';
+
             this.setState({
                 isChartLoaded : true,
                 data: {
@@ -75,19 +122,15 @@ class RelacionAlumnos extends Component {
                     data: [{
                         type: "pie",
                         startAngle: 75,
-                        toolTipContent: "<b>{label}</b>: {y}%",
+                        toolTipContent: "<b>{label}</b>: {y}",
                         showInLegend: "true",
                         legendText: "{label}",
                         indexLabelFontSize: 16,
-                        indexLabel: "{label} - {y}%",
-                        dataPoints: [
-                            { y: 50, label: "Ingresantes" },
-                            { y: 27, label: "Abandonos" },
-                            { y: 19, label: "Egresados" },
-                            { y: 5, label: "Graduados" },
-                        ]
+                        indexLabel: "{label} - {porcentaje}%",
+                        dataPoints: arregloDatos
                     }]
-                }
+                },
+                miHtml: cadena
             });
         })
     }
@@ -96,9 +139,42 @@ class RelacionAlumnos extends Component {
         
         return (
 
-        <div>
-            <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
-        </div>
+            <div>
+                <Tabs align="center" >
+                    <Tab label="Tabla">
+                        <div class="panel row align-items-center">
+                            <div class="panel-heading mt-3 mb-3">
+                                <h4 class="panel-title">Tabla de Demanda Social</h4>
+                            </div>
+                            <table className="table table-bordered table-striped col-md-11 mr-md-auto">
+                                <thead>
+                                    <tr>
+                                        <th>Clave</th>
+                                        <th>Etiquetas</th>
+                                        <th>Total</th>
+                                        <th>Decimal</th>
+                                        <th>Porcentaje</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                          {Parser(this.state.miHtml)}                            
+                                </tbody>
+                            </table>          
+                        </div>
+                    </Tab>
+                    <Tab label="Grafico">
+                    <div class="panel row align-items-center">
+                        <div class="panel-heading mt-3 mb-3">
+                            <h4 class="panel-title">Grafica de Demanda Social</h4>
+                        </div>
+                        <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
+                            <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
+                        </div>           
+                    </div>
+                    </Tab>
+                </Tabs>
+            </div>
+
         );
     }
 }
