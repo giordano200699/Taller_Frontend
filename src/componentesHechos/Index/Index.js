@@ -12,6 +12,8 @@ import PoblacionEstudiantil from './../PoblacionEstudiantil/PoblacionEstudiantil
 import { slide as Menu } from 'react-burger-menu';
 import Formulario from "./../../componentes/formulario";
 import './Index.css';
+import SelectAnios from './../../componentesConst/SeleccionAnios';
+import Periodo from './../../componentesConst/Periodo';
 
 let opcionGlobal = 1;
 
@@ -21,11 +23,17 @@ class Index extends Component {
         super();
         this.state = {
             opcion:1,
-            periodo:2009
+            opcionFiltro:'periodo',
+            periodo:2009,
+            anioini:2009,
+            aniofin:2009
         };
         this.handleChangeOpcion = this.handleChangeOpcion.bind(this);
+        this.handleChangeOpcionFiltro = this.handleChangeOpcionFiltro.bind(this);
         this.handleApretarBoton = this.handleApretarBoton.bind(this);
         this.handleChangePeriodo = this.handleChangePeriodo.bind(this);
+        this.handleChangeAnioIni = this.handleChangeAnioIni.bind(this);
+        this.handleChangeAnioFin = this.handleChangeAnioFin.bind(this);
         
 
     }
@@ -33,6 +41,13 @@ class Index extends Component {
     handleChangeOpcion(event) { // cambiar opcion
         this.setState({
             opcion: event.target.value
+        });
+        
+    }
+
+    handleChangeOpcionFiltro(event) { // cambiar opcion
+        this.setState({
+            opcionFiltro: event.target.value
         });
         
     }
@@ -47,10 +62,38 @@ class Index extends Component {
         });
     }
 
+    handleChangeAnioIni(event) { // cambiar año inicial solo si no es mayor a año final
+        //console.log(event.target.value);
+        if(parseInt(event.target.value,0) > parseInt(this.state.aniofin,0)){
+            this.setState({
+                anioini: this.state.aniofin
+            });
+        }else{
+            this.setState({
+                anioini: event.target.value
+            });
+        }
+    }
+
+    handleChangeAnioFin(event) {  // cambiar año final solo si este no es menor a año inicial
+        //console.log(event.target.value);
+        if(parseInt(event.target.value,0) < parseInt(this.state.anioini,0)){
+            this.setState({
+                aniofin: this.state.anioini
+            });
+        }else{
+            this.setState({
+                aniofin: event.target.value
+            });
+        }
+    }
+
 
 
 
     render() {
+
+        const op = this.state.opcionFiltro;
         
         return (
 
@@ -61,7 +104,7 @@ class Index extends Component {
                             <Tab label="Datos" className="panelDibujado">
                                 <div className="form-group">
                                     <label>Tipo:</label>
-                                    <select className="form-control" value={this.state.opcion} onChange={this.handleChangeOpcion}>
+                                    <select className="form-control" value={this.state.opcion} onChange={this.handleChangeOpcionFiltro}>
                                         <option value="1">Demanda Social</option>
                                         <option value="2">Movilidad</option>
                                         <option value="3">Relación de Alumnos</option>
@@ -71,21 +114,29 @@ class Index extends Component {
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Periodo:</label>
-                                    <select className="form-control" value={this.state.periodo} onChange={this.handleChangePeriodo}>
-                                        <option value="2009">2009</option>
-                                        <option value="2010">2010</option>
-                                        <option value="2011">2011</option>
-                                        <option value="2012">2012</option>
-                                        <option value="2013">2013</option>
-                                        <option value="2014">2014</option>
-                                        <option value="2015">2015</option>
-                                        <option value="2016">2016</option>
-                                        <option value="2017">2017</option>
-                                        <option value="2018">2018</option>
-                                        <option value="2018-2">2018-2</option>
-                                    </select>
+                                                <label>Filtro:</label>
+                                                <select className="form-control" value={this.state.opcionFiltro} onChange={this.handleChangeOpcionFiltro}>
+                                                    <option value="periodo">Periodo</option>
+                                                    <option value="intervalo">Intervalo de años</option>
+                                                </select>
                                 </div>
+
+                                {op === 'periodo' ? (
+                                    <div>
+                                        <Periodo titulo="Periodo:" periodo={this.state.periodo} cambiar={this.handleChangePeriodo} />
+                                    </div>
+                                ) : (null)}
+
+                                {op === 'intervalo' ? (
+                                    <div>
+                                        <div className="form-group">
+                                            <SelectAnios titulo="Año inicial:" anio={this.state.anioini} cambiar={this.handleChangeAnioIni} />
+                                        </div>
+                                        <div className="form-group">
+                                            <SelectAnios titulo="Año final:" anio={this.state.aniofin} cambiar={this.handleChangeAnioFin} />
+                                        </div>
+                                    </div>
+                                ) : (null)}
                                 
                                 <button className="btn btn-success btn-block" onClick={this.handleApretarBoton}><Link to="/" className="btn btn-success btn-block" >Generar Gráfica</Link></button>
                             </Tab>

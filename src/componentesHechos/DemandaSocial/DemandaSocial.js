@@ -51,10 +51,69 @@ class DemandaSocial extends Component {
             usuario : '', //usado para la sesion del usuario
             listaConceptosEncontrados : "", //usado para saber que conceptos se encontraron en la consulta,
             data: {},
-            miHtml : ''
+            miHtml : '',
+            data2: {}
         };
         this.miFuncion = this.miFuncion.bind(this);
-        this.miFuncion();
+        //this.miFuncion();
+
+        this.funcionGraficaColumnasMultiples = this.funcionGraficaColumnasMultiples.bind(this);
+        //this.funcionGraficaColumnasMultiples();
+    }
+
+    funcionGraficaColumnasMultiples(){
+
+        this.setState({
+            isChartLoaded : true,
+            data2: {
+                title: {
+                    text: "Demanda Social"
+                },
+                axisY: {
+                    title: "Cantidad",
+                    maximum: 100                  
+                },
+                data: [
+                {
+                    type: "column",
+                    showInLegend: true,
+                    dataPoints: [
+                    { y: 19, label: "Italy"},
+                    { y: 20, label: "China"},
+                    { y: 20, label: "France"},
+                    { y: 23, label: "Great Britain"},
+                    { y: 39, label: "Soviet Union"},
+                    { y: 95, label: "USA"}
+                    ]
+                },
+                {
+                    type: "column",
+                    showInLegend: true,
+                    dataPoints: [
+                    { y: 16, label: "Italy"},
+                    { y: 14, label: "China"},
+                    { y: 22, label: "France"},
+                    { y: 27, label: "Great Britain"},
+                    { y: 31, label: "Soviet Union"},
+                    { y: 75, label: "USA"}
+                    ]
+                },
+                {
+                    type: "column",
+                    showInLegend: true,
+                    dataPoints: [
+                    { y: 18, label: "Italy"},
+                    { y: 12, label: "China"},
+                    { y: 24, label: "France"},
+                    { y: 27, label: "Great Britain"},
+                    { y: 29, label: "Soviet Union"},
+                    { y: 66, label: "USA"}
+                    ]
+                }
+                ]
+            }
+        });
+
     }
 
 
@@ -188,6 +247,17 @@ class DemandaSocial extends Component {
                     </div>           
                 </div>
                 </Tab>
+                <Tab label="GraficoPrueba">
+                <div class="panel row align-items-center">
+                    <div class="panel-heading mt-3 mb-3">
+                        <h4 class="panel-title">Grafica de Demanda Social</h4>
+                    </div>
+                    <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
+                        <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data2 : (null)} />
+                    </div>           
+                </div>
+                </Tab>
+
             </Tabs>
             {/*<p>DISI: Doctorado en Ingeniería de Sistemas e Informática </p>*/}
         </div>
