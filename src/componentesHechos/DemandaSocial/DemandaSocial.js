@@ -59,7 +59,7 @@ class DemandaSocial extends Component {
 
 
     miFuncion(){
-        fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos?fecha_inicio=2002&fecha_fin=2004')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })
@@ -90,7 +90,7 @@ class DemandaSocial extends Component {
             });
         })
 
-        fetch('http://tallerbackend.herokuapp.com/ApiController/demandaSocial')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        fetch('http://tallerbackend.herokuapp.com/ApiController/demandaSocial?fecha_inicio=2002&fecha_fin=2004')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })
