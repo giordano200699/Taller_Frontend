@@ -17,8 +17,8 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class RelacionAlumnos extends Component {
 
-    constructor(){//constructor inicial
-        super();
+    constructor(props){//constructor inicial
+        super(props);
         this.state = {
             isUsed:false, //usado para saber si las aplicacion es usada
             showPopover: false, //usado para mostrar o no el popup
@@ -35,8 +35,8 @@ class RelacionAlumnos extends Component {
             fechaInicio: '1420243200', //usado para la fecha inicial del cuadro
             fechaFin: '1420502400', //usado para la fecha final del cuadro
             grafico : 'column2d', //usado para el tipo de grafico del cuadro
-            anioini : '2015', //usado para el año inicial del cuadro
-            aniofin : '2015', //usado para el año final del cuadro
+            anioini : ''+this.props.anioIni, //usado para el año inicial del cuadro
+            aniofin : ''+this.props.anioFin, //usado para el año final del cuadro
             anio: '2015', //usado para el año a biscar con el intervalo del mes
             mesini : '1', //usado para el mes inicial del cuadro
             mesfin : '12', //usado para el mes final del cuadro/grafico
@@ -60,7 +60,7 @@ class RelacionAlumnos extends Component {
 
 
     miFuncion(){
-        fetch('http://tallerbackend.herokuapp.com/ApiController/relacionAlumnos')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        fetch('http://tallerbackend.herokuapp.com/ApiController/relacionAlumnos?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })

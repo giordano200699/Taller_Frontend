@@ -17,8 +17,8 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class DemandaSocial extends Component {
 
-    constructor(){//constructor inicial
-        super();
+    constructor(props){//constructor inicial
+        super(props);
         this.state = {
             isUsed:false, //usado para saber si las aplicacion es usada
             showPopover: false, //usado para mostrar o no el popup
@@ -35,8 +35,8 @@ class DemandaSocial extends Component {
             fechaInicio: '1420243200', //usado para la fecha inicial del cuadro
             fechaFin: '1420502400', //usado para la fecha final del cuadro
             grafico : 'column2d', //usado para el tipo de grafico del cuadro
-            anioini : '2015', //usado para el año inicial del cuadro
-            aniofin : '2015', //usado para el año final del cuadro
+            anioini : ''+this.props.anioIni, //usado para el año inicial del cuadro
+            aniofin : ''+this.props.anioFin, //usado para el año final del cuadro
             anio: '2015', //usado para el año a biscar con el intervalo del mes
             mesini : '1', //usado para el mes inicial del cuadro
             mesfin : '12', //usado para el mes final del cuadro/grafico
@@ -52,10 +52,11 @@ class DemandaSocial extends Component {
             listaConceptosEncontrados : "", //usado para saber que conceptos se encontraron en la consulta,
             data: {},
             miHtml : '',
-            data2: {}
+            data2: {},
+            cadenaAnios:''
         };
         this.miFuncion = this.miFuncion.bind(this);
-        //this.miFuncion();
+        this.miFuncion();
 
         this.funcionGraficaColumnasMultiples = this.funcionGraficaColumnasMultiples.bind(this);
         //this.funcionGraficaColumnasMultiples();
@@ -118,7 +119,8 @@ class DemandaSocial extends Component {
 
 
     miFuncion(){
-        fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos?fecha_inicio=2002&fecha_fin=2004')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        //alert("SOY LLAMADO "+this.state.anioini+"  "+this.state.aniofin+"  -- "+this.props.anioFin );
+        fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })
@@ -149,7 +151,7 @@ class DemandaSocial extends Component {
             });
         })
 
-        fetch('http://tallerbackend.herokuapp.com/ApiController/demandaSocial?fecha_inicio=2002&fecha_fin=2004')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        fetch('http://tallerbackend.herokuapp.com/ApiController/demandaSocial?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })
@@ -162,6 +164,12 @@ class DemandaSocial extends Component {
             var totalA = [];
             var bandera=false;
             var totalTotal=0;
+            var cadenaAnios = '';
+
+            for(var i=parseInt(this.state.anioini);i<=parseInt(this.state.aniofin);i++){
+                cadenaAnios += '<th>'+i+'</th>';
+            }
+
             for(var i in result) {
                 if(bandera==false){
                     bandera=true;
@@ -191,12 +199,25 @@ class DemandaSocial extends Component {
             }
             cadena = cadena + "<td>"+totalTotal+"</td></tr>";
             this.setState({
-                miHtml: cadena
+                miHtml: cadena,
+                cadenaAnios:cadenaAnios
             });
         })
+        
+
+        
     }
 
     render() {
+        if(this.props.anioFin!=this.state.aniofin || this.props.anioIni!=this.state.anioini){
+            this.setState({
+                aniofin: this.props.anioFin,
+                anioini: this.props.anioIni
+            },() => {
+                this.miFuncion();
+            });
+            //this.miFuncion();
+        }
         
         return (
 
@@ -205,29 +226,13 @@ class DemandaSocial extends Component {
                 <Tab label="Tabla">
                     <div class="panel row align-items-center">
                         <div class="panel-heading mt-3 mb-3">
-                            <h4 class="panel-title">Tabla de Demanda Social</h4>
+                            <h4 class="panel-title">Tabla de Demanda Social {this.props.anioFin}</h4>
                         </div>
                         <table className="table table-bordered table-striped col-md-11 mr-md-auto">
                             <thead>
                                 <tr>
                                     <th>Etiquetas</th>
-                                    <th>2002</th>
-                                    <th>2003</th>
-                                    <th>2004</th>
-                                    <th>2005</th>
-                                    <th>2006</th>
-                                    <th>2007</th>
-                                    <th>2008</th>
-                                    <th>2009</th>
-                                    <th>2010</th>
-                                    <th>2011</th>
-                                    <th>2012</th>
-                                    <th>2013</th>
-                                    <th>2014</th>
-                                    <th>2015</th>
-                                    <th>2016</th>
-                                    <th>2017</th>
-                                    <th>2018</th>
+                                    {Parser(this.state.cadenaAnios)} 
                                     <th>Total General</th>
                                 </tr>
                             </thead>

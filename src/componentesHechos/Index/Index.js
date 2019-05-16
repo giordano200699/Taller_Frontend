@@ -16,6 +16,8 @@ import SelectAnios from './../../componentesConst/SeleccionAnios';
 import Periodo from './../../componentesConst/Periodo';
 
 let opcionGlobal = 1;
+let AnioIni = 2014;
+let AnioFin = 2018;
 
 class Index extends Component {
 
@@ -25,8 +27,8 @@ class Index extends Component {
             opcion:1,
             opcionFiltro:'periodo',
             periodo:2009,
-            anioini:2009,
-            aniofin:2009
+            anioini:2014,
+            aniofin:2018
         };
         this.handleChangeOpcion = this.handleChangeOpcion.bind(this);
         this.handleChangeOpcionFiltro = this.handleChangeOpcionFiltro.bind(this);
@@ -54,6 +56,8 @@ class Index extends Component {
 
     handleApretarBoton(event){
         opcionGlobal = this.state.opcion;
+        AnioIni = this.state.anioini;
+        AnioFin = this.state.aniofin;
     }
 
     handleChangePeriodo(event){
@@ -104,7 +108,7 @@ class Index extends Component {
                             <Tab label="Datos" className="panelDibujado">
                                 <div className="form-group">
                                     <label>Tipo:</label>
-                                    <select className="form-control" value={this.state.opcion} onChange={this.handleChangeOpcionFiltro}>
+                                    <select className="form-control" value={this.state.opcion} onChange={this.handleChangeOpcion}>
                                         <option value="1">Demanda Social</option>
                                         <option value="2">Movilidad</option>
                                         <option value="3">Relación de Alumnos</option>
@@ -164,11 +168,11 @@ class Index extends Component {
 }
 function miFuncion(){
     if(opcionGlobal == 1){
-        return(<DemandaSocial />)
+        return(<DemandaSocial  anioIni={AnioIni} anioFin ={AnioFin} />)
     }else if(opcionGlobal == 2){
         return(<Movilidad />)
     }else if(opcionGlobal == 3){
-        return(<RelacionAlumnos />)
+        return(<RelacionAlumnos anioIni={AnioIni} anioFin = {AnioFin}/>)
     }else if(opcionGlobal == 4){
         return(<ProgramaAlumnos />)
     }else{
