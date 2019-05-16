@@ -90,7 +90,7 @@ class DemandaSocial extends Component {
             });
         })
 
-        fetch('http://localhost:8888/back-estadisticas/ApiController/demandaSocial')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        fetch('http://tallerbackend.herokuapp.com/ApiController/demandaSocial')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })
