@@ -111,6 +111,7 @@ class RelacionAlumnos extends Component {
             }
             cadena= cadena+'<tr><td>Total</td><td>Total</td><td>'+suma+'</td><td>1</td><td>100%</td></tr>';
 
+
             this.setState({
                 isChartLoaded : true,
                 data: {
@@ -136,6 +137,15 @@ class RelacionAlumnos extends Component {
     }
 
     render() {
+
+         if(this.props.anioFin!=this.state.aniofin || this.props.anioIni!=this.state.anioini){
+            this.setState({
+                aniofin: this.props.anioFin,
+                anioini: this.props.anioIni
+            },() => {
+                this.miFuncion();
+            });
+        }
         
         return (
 
