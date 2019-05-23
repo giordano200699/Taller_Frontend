@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://Xbaxtian.github.io/front-estadisticas-sigap/",
-  "engines":{
+  "engines": {
     "npm": "6.5.0",
     "node": "11.6.0"
   },

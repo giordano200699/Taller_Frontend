@@ -2,15 +2,15 @@
 
 import React, { Component } from 'react';
 import './DemandaSocial.css';
-import Chart from './../../componentes/chart.js'
-import Fecha from './../../componentes/fecha.js'
-import BtnExport from './../../componentes/btn-export';
-import Tabla from './../../componentes/tabla';
+//import Chart from './../../componentes/chart.js'
+//import Fecha from './../../componentes/fecha.js'
+//import BtnExport from './../../componentes/btn-export';
+//import Tabla from './../../componentes/tabla';
 import {Tabs, Tab} from 'react-bootstrap-tabs';
-import ToolTipPosition from "./../../componentes/ToolTipPositions";
-import SelectGrafica from "./../../componentes/selectForGrafica";
-import SelectYear from "./../../componentes/selectYear";
-import SelectMonth from "./../../componentes/selectMonth";
+//import ToolTipPosition from "./../../componentes/ToolTipPositions";
+//import SelectGrafica from "./../../componentes/selectForGrafica";
+//import SelectYear from "./../../componentes/selectYear";
+//import SelectMonth from "./../../componentes/selectMonth";
 import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
 import Parser from 'html-react-parser';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -22,7 +22,7 @@ class DemandaSocial extends Component {
         this.state = {
             isUsed:false, //usado para saber si las aplicacion es usada
             showPopover: false, //usado para mostrar o no el popup
-            verdades : {}, //usado para  ver que conceptos estan sieno usados
+            verdades : {}, //usado para  ver que conceptos estan siendo usados
             chartData : {}, //usado para dar datos al FusionChart (cuadro)
             isChartLoaded: true, //usado para mostrat el FusionChart
             tableData: {}, //usado para dar datos a la tabla
@@ -52,6 +52,7 @@ class DemandaSocial extends Component {
             listaConceptosEncontrados : "", //usado para saber que conceptos se encontraron en la consulta,
             data: {},
             miHtml : '',
+            miLeyenda: '',
             data2: {},
             cadenaAnios:''
         };
@@ -160,10 +161,12 @@ class DemandaSocial extends Component {
 
             console.log(result);
             let cadena="";
+            let leyenda = "";
+            let sigla = "";
             var totalD=0;
             var totalA = [];
-            var bandera=false;
-            var totalTotal=0;
+            var bandera = false;
+            var totalTotal = 0;
             var cadenaAnios = '';
 
             for(var i=parseInt(this.state.anioini);i<=parseInt(this.state.aniofin);i++){
@@ -178,7 +181,29 @@ class DemandaSocial extends Component {
                     }
                 }
                 totalD=0;
-               cadena = cadena + "<tr><td>"+i+"</td>";
+                cadena = cadena + "<tr><td>"+ i +"</td>";
+                //leyenda += "<tr><td>"+ i;
+                //sigla = i;
+                
+                /*if(sigla == 'ASTI') leyenda += ": AUDITORIA Y SEGURIDAD DE TECNOLOGIA DE INFORMACION</td>";
+                switch(sigla){
+                    case "ASTI": leyenda += ": AUDITORIA Y SEGURIDAD DE TECNOLOGIA DE INFORMACION</td>";
+                        break;
+                    case 'DISI': leyenda += ": </td>";
+                        break;
+                    case 'GIC': leyenda += ": </td>";
+                        break;
+                    case 'GPTI': leyenda += ": </td>";
+                        break;
+                    case 'GTI': leyenda += ": </td>";
+                        break;
+                    case 'GTIC': leyenda += ": </td>";
+                        break;
+                    case 'ISW': leyenda += ": Ingeniería de Software</td>";
+                        break;
+                }
+                */
+
                for(var j in result[i]){
                 if(result[i][j]==0){
                     cadena = cadena+"<td></td>";
@@ -186,27 +211,36 @@ class DemandaSocial extends Component {
                     cadena = cadena+"<td>"+result[i][j]+"</td>";
                     totalD = totalD + result[i][j];
                     totalA[j]=totalA[j]+result[i][j];
-                }
-                
+                } 
                }
-               cadena = cadena + "<td>"+totalD+"</td></tr>";
+               cadena = cadena + "<td><H6><b>"+totalD+"</b></H6></td>";
                totalTotal= totalTotal + totalD;
                //"</tr>";
             }
-            cadena = cadena + "<tr><td>Total General</td>";
+            cadena = cadena + "<tr><td><H6><b>Total General</b></H6></td>";
             for(var i in totalA){
-                cadena = cadena+"<td>"+totalA[i]+"</td>";
+                cadena = cadena+"<td><H6><b>"+totalA[i]+"</b></H6></td>";
             }
-            cadena = cadena + "<td>"+totalTotal+"</td></tr>";
+            cadena = cadena + "<td><H6><b>"+totalTotal+"</b></H6></td>";
+
+            leyenda += "<h6><tr><td>ASTI: AUDITORIA Y SEGURIDAD DE TECNOLOGIA DE INFORMACION</td></h6>";
+            leyenda += "<h6><tr><td>DISI: DOCTORADO EN INGENIERIA DE SISTEMAS E INFORMATICA</td></h6>";
+            leyenda += "<h6><tr><td>GIC: GESTION DE LA INFORMACION Y DEL CONOCIMIENTO</td></h6>";
+            leyenda += "<h6><tr><td>GPTI: GERENCIA DE PROYECTOS DE TECNOLOGIA DE INFORMACION</td></h6>";
+            leyenda += "<h6><tr><td>GTI: GOBIERNO DE TECNOLOGIAS DE INFORMACION</td></h6>";
+            leyenda += "<h6><tr><td>GTIC: GESTION DE TECNOLOGIA DE INFORMACION Y COMUNICACIONES</td></h6>";
+            leyenda += "<h6><tr><td>ISW: INGENIERIA DE SOFTWARE</td></h6>";
+
             this.setState({
                 miHtml: cadena,
-                cadenaAnios:cadenaAnios
+                cadenaAnios:cadenaAnios,
+                miLeyenda: leyenda
             });
         })
-        
 
-        
     }
+
+
 
     render() {
         if(this.props.anioFin!=this.state.aniofin || this.props.anioIni!=this.state.anioini){
@@ -220,14 +254,14 @@ class DemandaSocial extends Component {
         }
         
         return (
-
             <div>
             <Tabs align="center" >
                 <Tab label="Tabla">
-                    <div class="panel row align-items-center">
-                        <div class="panel-heading mt-3 mb-3">
-                            <h4 class="panel-title">Tabla de Demanda Social {this.props.anioFin}</h4>
-                        </div>
+                    <div className="panel row align-items-center">
+                        <div className="panel-heading mt-3 mb-3">
+                            <h5>LEYENDA: {Parser(this.state.miLeyenda)} </h5>
+                            <h4 className="panel-title">Tabla de Datos - Demanda Social del {this.props.anioIni} al {this.props.anioFin}</h4>
+                        </div>                    
                         <table className="table table-bordered table-striped col-md-11 mr-md-auto">
                             <thead>
                                 <tr>
@@ -239,26 +273,26 @@ class DemandaSocial extends Component {
                             <tbody>
                                 {Parser(this.state.miHtml)}                                  
                             </tbody>
-                        </table>          
+                        </table>
                     </div>
                 </Tab>
                 <Tab label="Grafico">
-                <div class="panel row align-items-center">
-                    <div class="panel-heading mt-3 mb-3">
-                        <h4 class="panel-title">Grafica de Demanda Social</h4>
+                <div className="panel row align-items-center">
+                    <div className="panel-heading mt-3 mb-3">
+                        <h4 className="panel-title">Gráfica de Demanda Social</h4>
                     </div>
-                    <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
+                    <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
                         <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
                     </div>           
                 </div>
                 </Tab>
                 <Tab label="GraficoPrueba">
-                <div class="panel row align-items-center">
-                    <div class="panel-heading mt-3 mb-3">
-                        <h4 class="panel-title">Grafica de Demanda Social</h4>
+                <div className="panel row align-items-center">
+                    <div className="panel-heading mt-3 mb-3">
+                        <h4 className="panel-title">Grafica de Demanda Social</h4>
                     </div>
-                    <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
-                        <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data2 : (null)} />
+                    <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
+                        <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
                     </div>           
                 </div>
                 </Tab>

@@ -1,15 +1,15 @@
 /* App.js */
 
 import React, { Component } from 'react';
-import Chart from './../../componentes/chart.js'
-import Fecha from './../../componentes/fecha.js'
-import BtnExport from './../../componentes/btn-export';
-import Tabla from './../../componentes/tabla';
+//import Chart from './../../componentes/chart.js'
+//import Fecha from './../../componentes/fecha.js'
+//import BtnExport from './../../componentes/btn-export';
+//import Tabla from './../../componentes/tabla';
 import {Tabs, Tab} from 'react-bootstrap-tabs';
-import ToolTipPosition from "./../../componentes/ToolTipPositions";
-import SelectGrafica from "./../../componentes/selectForGrafica";
-import SelectYear from "./../../componentes/selectYear";
-import SelectMonth from "./../../componentes/selectMonth";
+//import ToolTipPosition from "./../../componentes/ToolTipPositions";
+//import SelectGrafica from "./../../componentes/selectForGrafica";
+//import SelectYear from "./../../componentes/selectYear";
+//import SelectMonth from "./../../componentes/selectMonth";
 import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
 import Parser from 'html-react-parser';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;

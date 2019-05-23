@@ -9,11 +9,11 @@ import SelectGrafica from "./../../componentes/selectForGrafica";
 import RelacionAlumnos from './../RelacionAlumnos/RelacionAlumnos';
 import ProgramaAlumnos from './../ProgramaAlumnos/ProgramaAlumnos';
 import PoblacionEstudiantil from './../PoblacionEstudiantil/PoblacionEstudiantil';
-import { slide as Menu } from 'react-burger-menu';
-import Formulario from "./../../componentes/formulario";
+//import { slide as Menu } from 'react-burger-menu';
+//import Formulario from "./../../componentes/formulario";
 import './Index.css';
 import SelectAnios from './../../componentesConst/SeleccionAnios';
-import Periodo from './../../componentesConst/Periodo';
+//import Periodo from './../../componentesConst/Periodo';
 
 let opcionGlobal = 1;
 let AnioIni = 2014;
@@ -25,7 +25,7 @@ class Index extends Component {
         super();
         this.state = {
             opcion:1,
-            opcionFiltro:'periodo',
+            opcionFiltro:'intervalo',
             periodo:2009,
             anioini:2014,
             aniofin:2018
@@ -36,7 +36,6 @@ class Index extends Component {
         this.handleChangePeriodo = this.handleChangePeriodo.bind(this);
         this.handleChangeAnioIni = this.handleChangeAnioIni.bind(this);
         this.handleChangeAnioFin = this.handleChangeAnioFin.bind(this);
-        
 
     }
 
@@ -44,10 +43,9 @@ class Index extends Component {
         this.setState({
             opcion: event.target.value
         });
-        
     }
 
-    handleChangeOpcionFiltro(event) { // cambiar opcion
+    handleChangeOpcionFiltro(event) { // cambiar opcion de Filtro
         this.setState({
             opcionFiltro: event.target.value
         });
@@ -92,11 +90,7 @@ class Index extends Component {
         }
     }
 
-
-
-
     render() {
-
         const op = this.state.opcionFiltro;
         
         return (
@@ -118,18 +112,18 @@ class Index extends Component {
                                 </div>
 
                                 <div className="form-group">
-                                                <label>Filtro:</label>
-                                                <select className="form-control" value={this.state.opcionFiltro} onChange={this.handleChangeOpcionFiltro}>
-                                                    <option value="periodo">Periodo</option>
-                                                    <option value="intervalo">Intervalo de años</option>
-                                                </select>
+                                    <label>Filtro:</label>
+                                    <select className="form-control" value={this.state.opcionFiltro} onChange={this.handleChangeOpcionFiltro}>
+                                        {/*<option value="periodo">Periodo</option>*/}
+                                        <option value="intervalo">Intervalo de años</option>
+                                    </select>
                                 </div>
 
-                                {op === 'periodo' ? (
+                                {/*op === 'periodo' ? (
                                     <div>
                                         <Periodo titulo="Periodo:" periodo={this.state.periodo} cambiar={this.handleChangePeriodo} />
                                     </div>
-                                ) : (null)}
+                                ) : (null)*/}
 
                                 {op === 'intervalo' ? (
                                     <div>
@@ -143,14 +137,23 @@ class Index extends Component {
                                 ) : (null)}
                                 
                                 <button className="btn btn-success btn-block" onClick={this.handleApretarBoton}><Link to="/" className="btn btn-success btn-block" >Generar Gráfica</Link></button>
+                            <div className="form-group">
+                                <label>Configuración adicional:</label>
+                                <form className="form-control" value={this.state.opcion} onChange={this.handleChangeOpcion}>
+                                <div><input type="checkbox" value="1"></input>Primero</div>
+                                <div><input type="checkbox" value="2"></input>Segundo</div>
+                                <div><input type="checkbox" value="3"></input>Tercero</div>
+                                <button className="btn btn-success btn-block" onClick={this.handleApretarBoton}><Link to="/" className="btn btn-success btn-block" >Actualizar</Link></button>
+                                </form>
+                            </div>
                             </Tab>
-                            <Tab label="Grafica">
-                                        {/*<div className="example-warper">*/}
-                                        <div className="panelDibujado">
-                                            <form className="opciones-formulario" onSubmit={this.onClickPreventDefault}>
-                                                <SelectGrafica grafico={this.state.grafico} grad={this.state.grad} colores={this.state.colores} cambioGrafico={this.handleChangeGrafico} cambioGrad={this.handleChangeGrad} cambioColores={this.handleChangeColores}/>
-                                            </form>
-                                        </div>
+                            <Tab label="Gráfica">
+                                {/*<div className="example-warper">*/}
+                                <div className="panelDibujado">
+                                    <form className="opciones-formulario" onSubmit={this.onClickPreventDefault}>
+                                        <SelectGrafica grafico={this.state.grafico} grad={this.state.grad} colores={this.state.colores} cambioGrafico={this.handleChangeGrafico} cambioGrad={this.handleChangeGrad} cambioColores={this.handleChangeColores}/>
+                                    </form>
+                                </div>
                             </Tab>
                         </Tabs>
                     </div>
