@@ -13,7 +13,15 @@ import {Tabs, Tab} from 'react-bootstrap-tabs';
 //import SelectMonth from "./../../componentes/selectMonth";
 import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
 import Parser from 'html-react-parser';
+import Pdf from '../Pdf/pdf';
+import PDFViewer from '../Pdf/PDFViewer';
+import PDFJs from '../Pdf/backends/pdfjs';
+import WebviewerBackend from '../Pdf/backends/webviewer';
+import html2canvas from 'html2canvas';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+//var pdf = require('html-pdf');
+
 
 class DemandaSocial extends Component {
 
@@ -54,72 +62,25 @@ class DemandaSocial extends Component {
             miHtml : '',
             miLeyenda: '',
             data2: {},
-            cadenaAnios:''
+            cadenaAnios:'',
+            imagen: null,
+            cargoImagen:false,
+            imagen2:null,
+            cargoImagen2:false,
+            key:"1",
+            esVisible:false
         };
         this.miFuncion = this.miFuncion.bind(this);
         this.miFuncion();
-
-        this.funcionGraficaColumnasMultiples = this.funcionGraficaColumnasMultiples.bind(this);
-        //this.funcionGraficaColumnasMultiples();
-    }
-
-    funcionGraficaColumnasMultiples(){
-
-        this.setState({
-            isChartLoaded : true,
-            data2: {
-                title: {
-                    text: "Demanda Social"
-                },
-                axisY: {
-                    title: "Cantidad",
-                    maximum: 100                  
-                },
-                data: [
-                {
-                    type: "column",
-                    showInLegend: true,
-                    dataPoints: [
-                    { y: 19, label: "Italy"},
-                    { y: 20, label: "China"},
-                    { y: 20, label: "France"},
-                    { y: 23, label: "Great Britain"},
-                    { y: 39, label: "Soviet Union"},
-                    { y: 95, label: "USA"}
-                    ]
-                },
-                {
-                    type: "column",
-                    showInLegend: true,
-                    dataPoints: [
-                    { y: 16, label: "Italy"},
-                    { y: 14, label: "China"},
-                    { y: 22, label: "France"},
-                    { y: 27, label: "Great Britain"},
-                    { y: 31, label: "Soviet Union"},
-                    { y: 75, label: "USA"}
-                    ]
-                },
-                {
-                    type: "column",
-                    showInLegend: true,
-                    dataPoints: [
-                    { y: 18, label: "Italy"},
-                    { y: 12, label: "China"},
-                    { y: 24, label: "France"},
-                    { y: 27, label: "Great Britain"},
-                    { y: 29, label: "Soviet Union"},
-                    { y: 66, label: "USA"}
-                    ]
-                }
-                ]
-            }
-        });
 
     }
 
 
     miFuncion(){
+
+        
+
+
         //alert("SOY LLAMADO "+this.state.anioini+"  "+this.state.aniofin+"  -- "+this.props.anioFin );
         fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
@@ -149,6 +110,22 @@ class DemandaSocial extends Component {
             },
             data: result
         }
+            });
+
+            const input2 = document.getElementById('graficax');
+            html2canvas(input2)
+            .then((canvas2) => {
+                const imgData2 = canvas2.toDataURL('image/png');
+                this.setState({
+                    imagen2 : imgData2,
+                    cargoImagen2:true
+                },()=>{
+                    this.setState({
+                        esVisible:false
+                    });
+                });
+                
+                
             });
         })
 
@@ -234,8 +211,23 @@ class DemandaSocial extends Component {
             this.setState({
                 miHtml: cadena,
                 cadenaAnios:cadenaAnios,
-                miLeyenda: leyenda
+                miLeyenda: leyenda,
+                esVisible:true
             });
+            const input = document.getElementById('tabla');
+            
+            html2canvas(input)
+            .then((canvas) => {
+                const imgData = canvas.toDataURL('image/png');
+                this.setState({
+                    imagen : imgData,
+                    cargoImagen:true
+                });
+                
+                
+            });
+            
+            
         })
 
     }
@@ -249,20 +241,44 @@ class DemandaSocial extends Component {
                 anioini: this.props.anioIni
             },() => {
                 this.miFuncion();
+                const input = document.getElementById('tabla');
+                html2canvas(input)
+                .then((canvas) => {
+                    const imgData = canvas.toDataURL('image/png');
+
+                    this.setState({
+                        imagen : imgData,
+                        cargoImagen:true
+                    });
+                    
+                });
+                // const input2 = document.getElementById('graficax');
+                // html2canvas(input2)
+                //     .then((canvas2) => {
+                //         const imgData2 = canvas2.toDataURL('image/png');
+
+                //         this.setState({
+                //             imagen2 : imgData2,
+                //             cargoImagen2:true
+                //         });
+                        
+                // });
             });
             //this.miFuncion();
         }
         
         return (
-            <div>
+            
+            <div id="contenido">  
             <Tabs align="center" >
                 <Tab label="Tabla">
-                    <div className="panel row align-items-center">
+                    <div className="panel row align-items-center" style={{paddingLeft:70}}>
                         <div className="panel-heading mt-3 mb-3">
-                            <h5>LEYENDA: {Parser(this.state.miLeyenda)} </h5>
+                            <h5 style={{marginBottom:15}}>LEYENDA:</h5>
+                            <h5 style={{marginBottom:15}}> {Parser(this.state.miLeyenda)} </h5>
                             <h4 className="panel-title">Tabla de Datos - Demanda Social del {this.props.anioIni} al {this.props.anioFin}</h4>
                         </div>                    
-                        <table className="table table-bordered table-striped col-md-11 mr-md-auto">
+                        <table className="table table-bordered table-striped col-md-11 mr-md-auto" >
                             <thead>
                                 <tr>
                                     <th>Etiquetas</th>
@@ -276,43 +292,64 @@ class DemandaSocial extends Component {
                         </table>
                     </div>
                 </Tab>
-                <Tab label="Grafico">
+                <Tab label="Grafico" >
                 <div className="panel row align-items-center">
-                    <div className="panel-heading mt-3 mb-3">
-                        <h4 className="panel-title">Gráfica de Demanda Social</h4>
+                    <div className="panel-heading mt-3 mb-3" >
+                        <h2 style={{marginLeft:60}} className="panel-title">Gráfica de Demanda Social</h2>
                     </div>
                     <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
                         <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
                     </div>           
                 </div>
                 </Tab>
-                <Tab label="GraficoPrueba">
-                <div className="panel row align-items-center">
+                <Tab label="Visualizar PDF" >
+                <div className="panel row align-items-center" >
                     <div className="panel-heading mt-3 mb-3">
-                        <h4 className="panel-title">Grafica de Demanda Social</h4>
+                        <h4 style={{marginLeft:60}} className="panel-title">Visualizar PDF</h4>
                     </div>
                     <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
-                        <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
+                        {/* <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} /> */}
+                        {/* <PDFViewer backend={WebviewerBackend} src='/myPDF.pdf'></PDFViewer> */}
+                        {this.state.cargoImagen&&this.state.cargoImagen2?<Pdf imagen={this.state.imagen} imagen2={this.state.imagen2}></Pdf>:null}
+                        
                     </div>           
                 </div>
                 </Tab>
 
             </Tabs>
+            <div style={this.state.esVisible?null:{display:'none'}}>
+                <div className="panel row align-items-center" id="tabla" style={{paddingLeft:70}}>
+                        <div className="panel-heading mt-3 mb-3">
+                            <h5 style={{marginBottom:15}}>LEYENDA:</h5>
+                            <h5 style={{marginBottom:15}}> {Parser(this.state.miLeyenda)} </h5>
+                            <h4 className="panel-title">Tabla de Datos - Demanda Social del {this.props.anioIni} al {this.props.anioFin}</h4>
+                        </div>                    
+                        <table className="table table-bordered table-striped col-md-11 mr-md-auto" >
+                            <thead>
+                                <tr>
+                                    <th>Etiquetas</th>
+                                    {Parser(this.state.cadenaAnios)} 
+                                    <th>Total General</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Parser(this.state.miHtml)}                                  
+                            </tbody>
+                        </table>
+                </div>
+
+                <div className="panel row align-items-center"  id="graficax">
+                    <div className="panel-heading mt-3 mb-3" >
+                        <h2 style={{marginLeft:60}} className="panel-title">Gráfica de Demanda Social</h2>
+                    </div>
+                    <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
+                        <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
+                    </div>           
+                </div>
+            </div>
             {/*<p>DISI: Doctorado en Ingeniería de Sistemas e Informática </p>*/}
         </div>
         );
     }
 }
 export default DemandaSocial;
-
-/*
-
-    { label: "DSI",  y: 0  },
-    { label: "GTIC", y: 15  },
-    { label: "ISW", y: 74  },
-    { label: "DGTI", y: 74  },
-    { label: "GIC",  y: 0  },
-    { label: "GTI",  y: 0  },
-    { label: "GPTI",  y: 0  },
-    { label: "ASTI",  y: 0  }
-*/
