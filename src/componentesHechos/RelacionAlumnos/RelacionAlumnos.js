@@ -104,12 +104,12 @@ class RelacionAlumnos extends Component {
                         break; 
                 }
                 cadena= cadena+'<td>'+parseInt(result[i]["count"])+'</td>';
-                cadena= cadena+'<td>'+Math.round((parseInt(result[i]["count"])/suma)*10000)/10000+'</td>';
+                //cadena= cadena+'<td>'+Math.round((parseInt(result[i]["count"])/suma)*10000)/10000+'</td>';
                 cadena= cadena+'<td>'+Math.round((parseInt(result[i]["count"])/suma)*10000)/100+'%</td>';
                 arregloDatos.push({y:parseInt(result[i]["count"]),label:result[i]["cod_perm"],porcentaje:Math.round((parseInt(result[i]["count"])/suma)*10000)/100});
                 cadena= cadena+'</tr>';
             }
-            cadena= cadena+'<tr><td>Total</td><td>Total</td><td>'+suma+'</td><td>1</td><td>100%</td></tr>';
+            cadena= cadena+'<tr><td>Total</td><td>Total</td><td>'+suma+'</td><td>100%</td></tr>';
 
 
             this.setState({
@@ -154,7 +154,7 @@ class RelacionAlumnos extends Component {
                     <Tab label="Tabla">
                         <div class="panel row align-items-center">
                             <div class="panel-heading mt-3 mb-3">
-                                <h4 class="panel-title">Tabla de Demanda Social</h4>
+                                <h4 class="panel-title">Tabla de Relación de Alumnos</h4>
                             </div>
                             <table className="table table-bordered table-striped col-md-11 mr-md-auto">
                                 <thead>
@@ -162,7 +162,6 @@ class RelacionAlumnos extends Component {
                                         <th>Clave</th>
                                         <th>Etiquetas</th>
                                         <th>Total</th>
-                                        <th>Decimal</th>
                                         <th>Porcentaje</th>
                                     </tr>
                                 </thead>
