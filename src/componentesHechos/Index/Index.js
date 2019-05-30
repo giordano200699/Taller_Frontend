@@ -13,11 +13,12 @@ import PoblacionEstudiantil from './../PoblacionEstudiantil/PoblacionEstudiantil
 //import Formulario from "./../../componentes/formulario";
 import './Index.css';
 import SelectAnios from './../../componentesConst/SeleccionAnios';
-//import Periodo from './../../componentesConst/Periodo';
+import Periodos from './../../componentesConst/Periodo';
 
 let opcionGlobal = 1;
 let AnioIni = 2014;
 let AnioFin = 2018;
+
 
 class Index extends Component {
 
@@ -53,9 +54,18 @@ class Index extends Component {
     }
 
     handleApretarBoton(event){
+        let opcion = this.state.opcionFiltro;
         opcionGlobal = this.state.opcion;
-        AnioIni = this.state.anioini;
-        AnioFin = this.state.aniofin;
+        if(opcion == 'periodo'){
+            //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            AnioIni = this.state.periodo;
+            AnioFin = this.state.periodo;
+        }else{
+            //console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            AnioIni = this.state.anioini;
+            AnioFin = this.state.aniofin;
+        }
+
     }
 
     handleChangePeriodo(event){
@@ -114,16 +124,16 @@ class Index extends Component {
                                 <div className="form-group">
                                     <label>Filtro:</label>
                                     <select className="form-control" value={this.state.opcionFiltro} onChange={this.handleChangeOpcionFiltro}>
-                                        {/*<option value="periodo">Periodo</option>*/}
+                                        <option value="periodo">Periodo</option>
                                         <option value="intervalo">Intervalo de años</option>
                                     </select>
                                 </div>
 
-                                {/*op === 'periodo' ? (
+                                {op === 'periodo' ? (
                                     <div>
-                                        <Periodo titulo="Periodo:" periodo={this.state.periodo} cambiar={this.handleChangePeriodo} />
+                                        <Periodos titulo="Periodo:" periodo={this.state.periodo} cambiar={this.handleChangePeriodo} />
                                     </div>
-                                ) : (null)*/}
+                                ) : (null)}
 
                                 {op === 'intervalo' ? (
                                     <div>

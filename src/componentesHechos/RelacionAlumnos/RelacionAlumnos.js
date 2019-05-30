@@ -1,17 +1,11 @@
 /* App.js */
 
 import React, { Component } from 'react';
-//import Chart from './../../componentes/chart.js'
-//import Fecha from './../../componentes/fecha.js'
-//import BtnExport from './../../componentes/btn-export';
-//import Tabla from './../../componentes/tabla';
 import {Tabs, Tab} from 'react-bootstrap-tabs';
-//import ToolTipPosition from "./../../componentes/ToolTipPositions";
-//import SelectGrafica from "./../../componentes/selectForGrafica";
-//import SelectYear from "./../../componentes/selectYear";
-//import SelectMonth from "./../../componentes/selectMonth";
 import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
 import Parser from 'html-react-parser';
+import Pdf from '../Pdf/pdf';
+import html2canvas from 'html2canvas';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 
@@ -51,7 +45,10 @@ class RelacionAlumnos extends Component {
             usuario : '', //usado para la sesion del usuario
             listaConceptosEncontrados : "", //usado para saber que conceptos se encontraron en la consulta,
             data: {},
-            miHtml: ''
+            miHtml: '',
+            imagen: null,
+            cargoImagen:false,
+            esVisible:false
         };
         this.miFuncion = this.miFuncion.bind(this);
         this.miFuncion();
@@ -132,6 +129,28 @@ class RelacionAlumnos extends Component {
                     }]
                 },
                 miHtml: cadena
+            },()=>{
+                this.setState({
+                    esVisible:true
+                },()=>{
+                    const input = document.getElementById('copia');
+                    html2canvas(input)
+                    .then((canvas2) => {
+                        const imgData = canvas2.toDataURL('image/png');
+                        this.setState({
+                            imagen : imgData,
+                            cargoImagen:true
+                        },()=>{
+                            this.setState({
+                                esVisible:false
+                            });
+                        });
+                        
+                        
+                    });
+                });
+
+                
             });
         })
     }
@@ -181,7 +200,48 @@ class RelacionAlumnos extends Component {
                         </div>           
                     </div>
                     </Tab>
+                    <Tab label="Visualizar PDF" >
+                        <div className="panel row align-items-center" >
+                            <div className="panel-heading mt-3 mb-3">
+                                <h4 style={{marginLeft:60}} className="titulo">Visualizar PDF</h4>
+                            </div>
+                            <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
+                                {this.state.cargoImagen?<Pdf imagen={this.state.imagen}></Pdf>:null}
+                                
+                            </div>           
+                        </div>
+                    </Tab>
                 </Tabs>
+
+                <div style={this.state.esVisible?null:{display:'none'}} id="copia">
+                    <div class="panel row align-items-center" style={{marginLeft:80}}>
+                        <div class="panel-heading mt-3 mb-3">
+                            <h4 class="panel-title">Tabla de Relación de Alumnos</h4>
+                        </div>
+                        <table className="table table-bordered table-striped col-md-11 mr-md-auto">
+                            <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Etiquetas</th>
+                                    <th>Total</th>
+                                    <th>Porcentaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                        {Parser(this.state.miHtml)}                            
+                            </tbody>
+                        </table>          
+                    </div>
+
+                    <div class="panel row align-items-center"  style={{marginLeft:80}}>
+                        <div class="panel-heading mt-3 mb-3">
+                            <h4 class="panel-title">Grafica de Demanda Social</h4>
+                        </div>
+                        <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
+                            <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
+                        </div>           
+                    </div>
+                </div>
             </div>
 
         );

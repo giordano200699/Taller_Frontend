@@ -19,6 +19,45 @@ import PDFJs from '../Pdf/backends/pdfjs';
 import WebviewerBackend from '../Pdf/backends/webviewer';
 import html2canvas from 'html2canvas';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+var opciones = ({
+        title: {
+            text: "Demanda Social"
+        },
+        data: [{
+            type:"column",
+            name: "2002",
+            showInLegend: true,
+            dataPoints:[
+                {label:"DISI ",y:0},
+                {label:"GTIC ",y:0},
+                {label:"ISW ",y:15},
+                {label:"GIC ",y:0},
+                {label:"GTI ",y:0},
+                {label:"GPTI ",y:0},
+                {label:"ASTI ",y:0},
+                {label:"GPGE ",y:0},
+                {label:"DGTI ",y:74},
+                {label:"SATD ",y:0}
+            ]
+        },
+        {
+            type:"column",
+            name: "2003",
+            showInLegend: true,
+            dataPoints:[
+                {label:"DISI ",y:0},
+                {label:"GTIC ",y:0},
+                {label:"ISW ",y:18},
+                {label:"GIC ",y:0},
+                {label:"GTI ",y:0},
+                {label:"GPTI ",y:0},
+                {label:"ASTI ",y:0},
+                {label:"GPGE ",y:0},
+                {label:"DGTI ",y:37},
+                {label:"SATD ",y:0}
+            ]
+        }]
+    });
 
 //var pdf = require('html-pdf');
 
@@ -73,6 +112,7 @@ class DemandaSocial extends Component {
         this.miFuncion = this.miFuncion.bind(this);
         this.miFuncion();
 
+
     }
 
 
@@ -80,36 +120,66 @@ class DemandaSocial extends Component {
 
         
 
-
         //alert("SOY LLAMADO "+this.state.anioini+"  "+this.state.aniofin+"  -- "+this.props.anioFin );
-        fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        //fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)
         .then((response)=>{
             return response.json();
         })
         .then((result)=>{
-            // result['datasets'][0]['backgroundColor'] = 'rgba(54, 162, 235, 0.6)';
 
-            // const chartData1=[];
+            /*DEBE BOTAR ALGO ASI :
+                [{
+                    "type":"column",
+                    "name": "2002",
+                    "showInLegend": true,
+                    "dataPoints":[{"label":"DISI ","y":0},
+                    {"label":"GTIC ","y":0},
+                    {"label":"ISW ","y":15},
+                    {"label":"GIC ","y":0},
+                    {"label":"GTI ","y":0},
+                    {"label":"GPTI ","y":0},
+                    {"label":"ASTI ","y":0},
+                    {"label":"GPGE ","y":0},
+                    {"label":"DGTI ","y":74},
+                    {"label":"SATD ","y":0}]
+                },
+                {
+                    "type":"column",
+                    "name": "2003",
+                    "showInLegend": true,
+                    "dataPoints":[{"label":"DISI ","y":0},
+                    {"label":"GTIC ","y":0},
+                    {"label":"ISW ","y":18},
+                    {"label":"GIC ","y":0},
+                    {"label":"GTI ","y":0},
+                    {"label":"GPTI ","y":0},
+                    {"label":"ASTI ","y":0},
+                    {"label":"GPGE ","y":0},
+                    {"label":"DGTI ","y":37},
+                    {"label":"SATD ","y":0}]
+                }]
+            */
+            var miContador = this.state.anioini;
+            var resultado =[];
+           for (let fila of result) {
+                console.log(fila);
+                fila.name=''+miContador;
+                fila.showInLegend=true;
+                miContador++;
+                resultado.push
+            }
 
-            // for(var i in result.labels)
-            // {
-            //     this.setState({
-            //         listaConceptosEncontrados : (this.state.listaConceptosEncontrados + result['labels'][i]+", ")
-            //     })
-            //   chartData1.push({
-            //     label: result['labels'][i],
-            //     value: result['datasets'][0]['data'][i]
-            //   });
-            // }
+            console.log(result);
 
             this.setState({
                 isChartLoaded : true,
                 data: {
-            title: {
-                text: "Demanda Social"
-            },
-            data: result
-        }
+                    title: {
+                        text: "Demanda Social"
+                    },
+                    data: result
+                }
             });
 
             const input2 = document.getElementById('graficax');
@@ -136,7 +206,7 @@ class DemandaSocial extends Component {
         .then((result)=>{
             //result = JSON.parse(result);
 
-            console.log(result);
+            //console.log(result);
             let cadena="";
             let leyenda = "";
             let sigla = "";
@@ -159,54 +229,32 @@ class DemandaSocial extends Component {
                 }
                 totalD=0;
                 cadena = cadena + "<tr><td>"+ i +"</td>";
-                //leyenda += "<tr><td>"+ i;
-                //sigla = i;
-                
-                /*if(sigla == 'ASTI') leyenda += ": AUDITORIA Y SEGURIDAD DE TECNOLOGIA DE INFORMACION</td>";
-                switch(sigla){
-                    case "ASTI": leyenda += ": AUDITORIA Y SEGURIDAD DE TECNOLOGIA DE INFORMACION</td>";
-                        break;
-                    case 'DISI': leyenda += ": </td>";
-                        break;
-                    case 'GIC': leyenda += ": </td>";
-                        break;
-                    case 'GPTI': leyenda += ": </td>";
-                        break;
-                    case 'GTI': leyenda += ": </td>";
-                        break;
-                    case 'GTIC': leyenda += ": </td>";
-                        break;
-                    case 'ISW': leyenda += ": Ingeniería de Software</td>";
-                        break;
-                }
-                */
 
-               for(var j in result[i]){
-                if(result[i][j]==0){
-                    cadena = cadena+"<td></td>";
-                }else{
-                    cadena = cadena+"<td>"+result[i][j]+"</td>";
-                    totalD = totalD + result[i][j];
-                    totalA[j]=totalA[j]+result[i][j];
+                for(var j in result[i]){
+                    if(result[i][j]==0){
+                        cadena = cadena+"<td></td>";
+                    }else{
+                        cadena = cadena+"<td>"+result[i][j]+"</td>";
+                        totalD = totalD + result[i][j];
+                        totalA[j]=totalA[j]+result[i][j];
                 } 
                }
                cadena = cadena + "<td><H6><b>"+totalD+"</b></H6></td>";
                totalTotal= totalTotal + totalD;
-               //"</tr>";
             }
             cadena = cadena + "<tr><td><H6><b>Total General</b></H6></td>";
             for(var i in totalA){
                 cadena = cadena+"<td><H6><b>"+totalA[i]+"</b></H6></td>";
             }
             cadena = cadena + "<td><H6><b>"+totalTotal+"</b></H6></td>";
-
-            leyenda += "<h6><tr><td>ASTI: AUDITORIA Y SEGURIDAD DE TECNOLOGIA DE INFORMACION</td></h6>";
-            leyenda += "<h6><tr><td>DISI: DOCTORADO EN INGENIERIA DE SISTEMAS E INFORMATICA</td></h6>";
-            leyenda += "<h6><tr><td>GIC: GESTION DE LA INFORMACION Y DEL CONOCIMIENTO</td></h6>";
-            leyenda += "<h6><tr><td>GPTI: GERENCIA DE PROYECTOS DE TECNOLOGIA DE INFORMACION</td></h6>";
-            leyenda += "<h6><tr><td>GTI: GOBIERNO DE TECNOLOGIAS DE INFORMACION</td></h6>";
-            leyenda += "<h6><tr><td>GTIC: GESTION DE TECNOLOGIA DE INFORMACION Y COMUNICACIONES</td></h6>";
-            leyenda += "<h6><tr><td>ISW: INGENIERIA DE SOFTWARE</td></h6>";
+            leyenda += "<hr></hr>"
+            leyenda += "<h6 className='leyenda'><tr><td>ASTI: AUDITORIA Y SEGURIDAD DE TECNOLOGIA DE INFORMACION</td></h6>";
+            leyenda += "<h6 className='leyenda'><tr><td>DISI: DOCTORADO EN INGENIERIA DE SISTEMAS E INFORMATICA</td></h6>";
+            leyenda += "<h6 className='leyenda'><tr><td>GIC: GESTION DE LA INFORMACION Y DEL CONOCIMIENTO</td></h6>";
+            leyenda += "<h6 className='leyenda'><tr><td>GPTI: GERENCIA DE PROYECTOS DE TECNOLOGIA DE INFORMACION</td></h6>";
+            leyenda += "<h6 className='leyenda'><tr><td>GTI: GOBIERNO DE TECNOLOGIAS DE INFORMACION</td></h6>";
+            leyenda += "<h6 className='leyenda'><tr><td>GTIC: GESTION DE TECNOLOGIA DE INFORMACION Y COMUNICACIONES</td></h6>";
+            leyenda += "<h6 className='leyenda'><tr><td>ISW: INGENIERIA DE SOFTWARE</td></h6>";
 
             this.setState({
                 miHtml: cadena,
@@ -266,6 +314,9 @@ class DemandaSocial extends Component {
             });
             //this.miFuncion();
         }
+
+        const aI = this.props.anioIni;
+        const aF = this.props.anioFin;
         
         return (
             
@@ -274,9 +325,10 @@ class DemandaSocial extends Component {
                 <Tab label="Tabla">
                     <div className="panel row align-items-center" style={{paddingLeft:70}}>
                         <div className="panel-heading mt-3 mb-3">
-                            <h5 style={{marginBottom:15}}>LEYENDA:</h5>
-                            <h5 style={{marginBottom:15}}> {Parser(this.state.miLeyenda)} </h5>
-                            <h4 className="panel-title">Tabla de Datos - Demanda Social del {this.props.anioIni} al {this.props.anioFin}</h4>
+                            <h5 className="titulo">LEYENDA: {Parser(this.state.miLeyenda)} </h5>
+                            <hr></hr>
+                            {aI == aF ? (<h4 className="titulo">Tabla de Datos - Demanda Social del año {this.props.anioIni}</h4>) : 
+                            (<h4 className="titulo">Tabla de Datos - Demanda Social del {this.props.anioIni} al {this.props.anioFin}</h4>)}
                         </div>                    
                         <table className="table table-bordered table-striped col-md-11 mr-md-auto" >
                             <thead>
@@ -295,7 +347,7 @@ class DemandaSocial extends Component {
                 <Tab label="Grafico" >
                 <div className="panel row align-items-center">
                     <div className="panel-heading mt-3 mb-3" >
-                        <h2 style={{marginLeft:60}} className="panel-title">Gráfica de Demanda Social</h2>
+                        <h2 style={{marginLeft:60}} className="titulo">Gráfica de Demanda Social</h2>
                     </div>
                     <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
                         <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
@@ -305,9 +357,10 @@ class DemandaSocial extends Component {
                 <Tab label="Visualizar PDF" >
                 <div className="panel row align-items-center" >
                     <div className="panel-heading mt-3 mb-3">
-                        <h4 style={{marginLeft:60}} className="panel-title">Visualizar PDF</h4>
+                        <h4 style={{marginLeft:60}} className="titulo">Visualizar PDF</h4>
                     </div>
                     <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
+                        {/* <CanvasJSChart options = {opciones} /> */}
                         {/* <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} /> */}
                         {/* <PDFViewer backend={WebviewerBackend} src='/myPDF.pdf'></PDFViewer> */}
                         {this.state.cargoImagen&&this.state.cargoImagen2?<Pdf imagen={this.state.imagen} imagen2={this.state.imagen2}></Pdf>:null}
@@ -317,13 +370,22 @@ class DemandaSocial extends Component {
                 </Tab>
 
             </Tabs>
+
+
+
+
+
+
+
+
             <div style={this.state.esVisible?null:{display:'none'}}>
                 <div className="panel row align-items-center" id="tabla" style={{paddingLeft:70}}>
                         <div className="panel-heading mt-3 mb-3">
-                            <h5 style={{marginBottom:15}}>LEYENDA:</h5>
-                            <h5 style={{marginBottom:15}}> {Parser(this.state.miLeyenda)} </h5>
-                            <h4 className="panel-title">Tabla de Datos - Demanda Social del {this.props.anioIni} al {this.props.anioFin}</h4>
-                        </div>                    
+                            <h5 className="titulo">LEYENDA: {Parser(this.state.miLeyenda)} </h5>
+                            <hr></hr>
+                            {aI == aF ? (<h4 className="titulo">Tabla de Datos - Demanda Social del año {this.props.anioIni}</h4>) : 
+                            (<h4 className="titulo">Tabla de Datos - Demanda Social del {this.props.anioIni} al {this.props.anioFin}</h4>)}
+                        </div>                     
                         <table className="table table-bordered table-striped col-md-11 mr-md-auto" >
                             <thead>
                                 <tr>
@@ -339,8 +401,8 @@ class DemandaSocial extends Component {
                 </div>
 
                 <div className="panel row align-items-center"  id="graficax">
-                    <div className="panel-heading mt-3 mb-3" >
-                        <h2 style={{marginLeft:60}} className="panel-title">Gráfica de Demanda Social</h2>
+                    <div className="panel-heading mt-3 mb-3">
+                        <h4 style={{marginLeft:60}} className="titulo">Visualizar PDF</h4>
                     </div>
                     <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
                         <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />

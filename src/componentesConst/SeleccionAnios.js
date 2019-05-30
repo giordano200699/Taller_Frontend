@@ -5,7 +5,7 @@ class SelectAnios extends Component{
     constructor(props){
         super(props);
         this.state = {
-            titulo : props.titulo
+            titulo : props.titulo,
         };
     }
 
@@ -14,7 +14,7 @@ class SelectAnios extends Component{
             <div className="form-group">
                 <label>{this.state.titulo}</label>
                 <select className="form-control" value={this.props.anio} onChange={this.props.cambiar}>
-                    <option value='1990'>1990</option>
+                    {/*<option value='1990'>1990</option>
                     <option value='1991'>1991</option>
                     <option value='1992'>1992</option>
                     <option value='1993'>1993</option>
@@ -25,7 +25,7 @@ class SelectAnios extends Component{
                     <option value='1998'>1998</option>
                     <option value='1999'>1999</option>
                     <option value='2000'>2000</option>
-                    <option value='2001'>2001</option>
+                    <option value='2001'>2001</option>*/}
                     <option value='2002'>2002</option>
                     <option value='2003'>2003</option>
                     <option value='2004'>2004</option>
