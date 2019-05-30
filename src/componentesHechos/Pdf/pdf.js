@@ -39,11 +39,13 @@ class Pdf extends Component {
                     <Image src={this.props.imagen}></Image>
                 </View>
             </Page>
+            {this.props.imagen2?
             <Page size="A4">
                 <View >
                     <Image src={this.props.imagen2}></Image>
                 </View>
             </Page>
+            :null}
                 
             </Document>
             </PDFViewer>

@@ -147,19 +147,15 @@ class Index extends Component {
                                 ) : (null)}
                                 
                                 <button className="btn btn-success btn-block" onClick={this.handleApretarBoton}><Link to="/" className="btn btn-success btn-block" >Generar Gráfica</Link></button>
-                            
-                            {   <div className="form-group">
-                                    <label>Configuración adicional:</label>
-                                    <form className="form-control" value={this.state.opcion} onChange={this.handleChangeOpcion}>
-                                    <div><input type="checkbox" value="1"></input>Primero</div>
-                                    <div><input type="checkbox" value="2"></input>Segundo</div>
-                                    <div><input type="checkbox" value="3"></input>Tercero</div>
-                                    <button className="btn btn-success btn-block" onClick={this.handleApretarBoton}><Link to="/" className="btn btn-success btn-block" >Actualizar</Link></button>
-                                    </form>
-                                </div>}
-                            
-                            
-                            
+                            {/* <div className="form-group">
+                                <label>Configuración adicional:</label>
+                                <form className="form-control" value={this.state.opcion} onChange={this.handleChangeOpcion}>
+                                <div><input type="checkbox" value="1"></input>Primero</div>
+                                <div><input type="checkbox" value="2"></input>Segundo</div>
+                                <div><input type="checkbox" value="3"></input>Tercero</div>
+                                <button className="btn btn-success btn-block" onClick={this.handleApretarBoton}><Link to="/" className="btn btn-success btn-block" >Actualizar</Link></button>
+                                </form>
+                            </div> */}
                             </Tab>
                             <Tab label="Gráfica">
                                 {/*<div className="example-warper">*/}
@@ -191,9 +187,9 @@ function miFuncion(){
     }else if(opcionGlobal == 3){
         return(<RelacionAlumnos anioIni={AnioIni} anioFin = {AnioFin}/>)
     }else if(opcionGlobal == 4){
-        return(<ProgramaAlumnos />)
+        return(<ProgramaAlumnos  anioIni={AnioIni} anioFin = {AnioFin} />)
     }else{
-        return(<PoblacionEstudiantil />)
+        return(<PoblacionEstudiantil  anioIni={AnioIni} anioFin = {AnioFin} />)
     }
     
 }
