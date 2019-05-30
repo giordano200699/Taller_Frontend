@@ -12,12 +12,14 @@ import SelectYear from "./../../componentes/selectYear";
 import SelectMonth from "./../../componentes/selectMonth";
 import CanvasJSReact, {CanvasJS} from './../../canvasjs.react';
 import Parser from 'html-react-parser';
+import Pdf from '../Pdf/pdf';
+import html2canvas from 'html2canvas';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class PoblacionEstudiantil extends Component {
 
-    constructor(){//constructor inicial
-        super();
+    constructor(props){//constructor inicial
+        super(props);
         this.state = {
             isUsed:false, //usado para saber si las aplicacion es usada
             showPopover: false, //usado para mostrar o no el popup
@@ -34,8 +36,8 @@ class PoblacionEstudiantil extends Component {
             fechaInicio: '1420243200', //usado para la fecha inicial del cuadro
             fechaFin: '1420502400', //usado para la fecha final del cuadro
             grafico : 'column2d', //usado para el tipo de grafico del cuadro
-            anioini : '2015', //usado para el año inicial del cuadro
-            aniofin : '2015', //usado para el año final del cuadro
+            anioini : ''+this.props.anioIni, //usado para el año inicial del cuadro
+            aniofin : ''+this.props.anioFin, //usado para el año final del cuadro
             anio: '2015', //usado para el año a biscar con el intervalo del mes
             mesini : '1', //usado para el mes inicial del cuadro
             mesfin : '12', //usado para el mes final del cuadro/grafico
@@ -51,7 +53,10 @@ class PoblacionEstudiantil extends Component {
             listaConceptosEncontrados : "", //usado para saber que conceptos se encontraron en la consulta,
             data: {},
             miHtml: '',
-            miHtml2:''
+            miHtml2:'',
+            imagen: null,
+            cargoImagen:false,
+            esVisible:false
         };
         this.miFuncion = this.miFuncion.bind(this);
         this.miFuncion();
@@ -60,7 +65,7 @@ class PoblacionEstudiantil extends Component {
 
 
     miFuncion(){
-        fetch('http://tallerbackend.herokuapp.com/ApiController/poblacionEstudiantil')//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        fetch('http://tallerbackend.herokuapp.com/ApiController/poblacionEstudiantil?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })
@@ -103,6 +108,28 @@ class PoblacionEstudiantil extends Component {
                 },
                 miHtml:cadena1,
                 miHtml2:cadena2
+            },()=>{
+                this.setState({
+                    esVisible:true
+                },()=>{
+                    const input = document.getElementById('copia');
+                    html2canvas(input)
+                    .then((canvas2) => {
+                        const imgData = canvas2.toDataURL('image/png');
+                        this.setState({
+                            imagen : imgData,
+                            cargoImagen:true
+                        },()=>{
+                            this.setState({
+                                esVisible:false
+                            });
+                        });
+                        
+                        
+                    });
+                });
+
+                
             });
         })
     }
@@ -115,7 +142,7 @@ class PoblacionEstudiantil extends Component {
                     <Tab label="Tabla">
                         <div class="panel row align-items-center">
                             <div class="panel-heading mt-3 mb-3">
-                                <h4 class="panel-title">Tabla de Demanda Social</h4>
+                                <h4 class="panel-title">Tabla de Población Estudiantil</h4>
                             </div>
                             <table className="table table-bordered table-striped col-md-11 mr-md-auto">
                                 <thead>
@@ -137,7 +164,46 @@ class PoblacionEstudiantil extends Component {
                         </div>           
                     </div>
                     </Tab>
+
+                    <Tab label="Visualizar PDF" >
+                        <div className="panel row align-items-center" >
+                            <div className="panel-heading mt-3 mb-3">
+                                <h4 style={{marginLeft:60}} className="titulo">Visualizar PDF</h4>
+                            </div>
+                            <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
+                                {this.state.cargoImagen?<Pdf imagen={this.state.imagen}></Pdf>:null}
+                                
+                            </div>           
+                        </div>
+                    </Tab>
                 </Tabs>
+
+                <div style={this.state.esVisible?null:{display:'none'}} id="copia">
+                    
+                    <div class="panel row align-items-center" style={{marginLeft:80}}>
+                        <div class="panel-heading mt-3 mb-3">
+                            <h4 class="panel-title">Tabla de Población Estudiantil</h4>
+                        </div>
+                        <table className="table table-bordered table-striped col-md-11 mr-md-auto">
+                            <thead>
+                                {Parser(this.state.miHtml)}  
+                            </thead>
+                            <tbody>
+                                {Parser(this.state.miHtml2)}                            
+                            </tbody>
+                        </table>          
+                    </div>
+
+                    <div class="panel row align-items-center" style={{marginLeft:80}}>
+                        <div class="panel-heading mt-3 mb-3">
+                            <h4 class="panel-title">Grafica de Demanda Social</h4>
+                        </div>
+                        <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
+                            <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
+                        </div>           
+                    </div>
+                </div>
+                
             </div>
 
         );
