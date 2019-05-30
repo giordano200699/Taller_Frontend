@@ -99,6 +99,7 @@ class DemandaSocial extends Component {
             listaConceptosEncontrados : "", //usado para saber que conceptos se encontraron en la consulta,
             data: {},
             miHtml : '',
+            tablaFooter:'',
             miLeyenda: '',
             data2: {},
             cadenaAnios:'',
@@ -117,8 +118,6 @@ class DemandaSocial extends Component {
 
 
     miFuncion(){
-
-        
 
         //alert("SOY LLAMADO "+this.state.anioini+"  "+this.state.aniofin+"  -- "+this.props.anioFin );
         //fetch('http://tallerbackend.herokuapp.com/ApiController/listaConceptos?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
@@ -209,7 +208,7 @@ class DemandaSocial extends Component {
             //console.log(result);
             let cadena="";
             let leyenda = "";
-            let sigla = "";
+            let cadenaFooter = "";
             var totalD=0;
             var totalA = [];
             var bandera = false;
@@ -217,7 +216,7 @@ class DemandaSocial extends Component {
             var cadenaAnios = '';
 
             for(var i=parseInt(this.state.anioini);i<=parseInt(this.state.aniofin);i++){
-                cadenaAnios += '<th>'+i+'</th>';
+                cadenaAnios += '<th><b>'+i+'</b></th>';
             }
 
             for(var i in result) {
@@ -239,27 +238,33 @@ class DemandaSocial extends Component {
                         totalA[j]=totalA[j]+result[i][j];
                 } 
                }
-               cadena = cadena + "<td><H6><b>"+totalD+"</b></H6></td>";
+               cadena = cadena + "<td>"+totalD+"</td>";
                totalTotal= totalTotal + totalD;
             }
-            cadena = cadena + "<tr><td><H6><b>Total General</b></H6></td>";
+            //cadena = cadena + "<tfoot><tr><td><b>Total General</b></td>";
+            cadenaFooter = cadenaFooter + "<tr><td><b>Total General</b></td>";
             for(var i in totalA){
-                cadena = cadena+"<td><H6><b>"+totalA[i]+"</b></H6></td>";
+                //cadena = cadena+"<td><b>"+totalA[i]+"</b></td>";
+                cadenaFooter = cadenaFooter + "<td><b>"+totalA[i]+"</b></td>";
             }
-            cadena = cadena + "<td><H6><b>"+totalTotal+"</b></H6></td>";
+            //cadena = cadena + "<td><b>"+totalTotal+"</b></td></tfoot>";
+            cadenaFooter = cadenaFooter +  "<td><b>"+totalTotal+"</b></td>";
+            
+            //Aqui se llena los datos de la leyenda
             leyenda += "<hr></hr>"
-            leyenda += "<h6 className='leyenda'><tr><td>ASTI: AUDITORIA Y SEGURIDAD DE TECNOLOGIA DE INFORMACION</td></h6>";
-            leyenda += "<h6 className='leyenda'><tr><td>DISI: DOCTORADO EN INGENIERIA DE SISTEMAS E INFORMATICA</td></h6>";
-            leyenda += "<h6 className='leyenda'><tr><td>GIC: GESTION DE LA INFORMACION Y DEL CONOCIMIENTO</td></h6>";
-            leyenda += "<h6 className='leyenda'><tr><td>GPTI: GERENCIA DE PROYECTOS DE TECNOLOGIA DE INFORMACION</td></h6>";
-            leyenda += "<h6 className='leyenda'><tr><td>GTI: GOBIERNO DE TECNOLOGIAS DE INFORMACION</td></h6>";
-            leyenda += "<h6 className='leyenda'><tr><td>GTIC: GESTION DE TECNOLOGIA DE INFORMACION Y COMUNICACIONES</td></h6>";
-            leyenda += "<h6 className='leyenda'><tr><td>ISW: INGENIERIA DE SOFTWARE</td></h6>";
+            leyenda += "<h5 className='leyenda'><tr><td>ASTI: AUDITORIA Y SEGURIDAD DE TECNOLOGIA DE INFORMACION</td></h5>";
+            leyenda += "<h5 className='leyenda'><tr><td>DISI: DOCTORADO EN INGENIERIA DE SISTEMAS E INFORMATICA</td></h5>";
+            leyenda += "<h5 className='leyenda'><tr><td>GIC: GESTION DE LA INFORMACION Y DEL CONOCIMIENTO</td></h5>";
+            leyenda += "<h5 className='leyenda'><tr><td>GPTI: GERENCIA DE PROYECTOS DE TECNOLOGIA DE INFORMACION</td></h5>";
+            leyenda += "<h5 className='leyenda'><tr><td>GTI: GOBIERNO DE TECNOLOGIAS DE INFORMACION</td></h5>";
+            leyenda += "<h5 className='leyenda'><tr><td>GTIC: GESTION DE TECNOLOGIA DE INFORMACION Y COMUNICACIONES</td></h5>";
+            leyenda += "<h5 className='leyenda'><tr><td>ISW: INGENIERIA DE SOFTWARE</td></h5>";
 
             this.setState({
                 miHtml: cadena,
                 cadenaAnios:cadenaAnios,
                 miLeyenda: leyenda,
+                tablaFooter: cadenaFooter,
                 esVisible:true
             });
             const input = document.getElementById('tabla');
@@ -330,17 +335,20 @@ class DemandaSocial extends Component {
                             {aI == aF ? (<h4 className="titulo">Tabla de Datos - Demanda Social del año {this.props.anioIni}</h4>) : 
                             (<h4 className="titulo">Tabla de Datos - Demanda Social del {this.props.anioIni} al {this.props.anioFin}</h4>)}
                         </div>                    
-                        <table className="table table-bordered table-striped col-md-11 mr-md-auto" >
+                        <table className="table table-bordered table-striped col-md-11 mr-md-auto greenTable" >
                             <thead>
                                 <tr>
-                                    <th>Etiquetas</th>
+                                    <th><b>Etiquetas</b></th>
                                     {Parser(this.state.cadenaAnios)} 
-                                    <th>Total General</th>
+                                    <th><b>Total General</b></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {Parser(this.state.miHtml)}                                  
                             </tbody>
+                            <tfoot>
+                                {Parser(this.state.tablaFooter)}                                  
+                            </tfoot>
                         </table>
                     </div>
                 </Tab>
@@ -386,17 +394,20 @@ class DemandaSocial extends Component {
                             {aI == aF ? (<h4 className="titulo">Tabla de Datos - Demanda Social del año {this.props.anioIni}</h4>) : 
                             (<h4 className="titulo">Tabla de Datos - Demanda Social del {this.props.anioIni} al {this.props.anioFin}</h4>)}
                         </div>                     
-                        <table className="table table-bordered table-striped col-md-11 mr-md-auto" >
+                        <table className="table table-bordered table-striped col-md-11 mr-md-auto greenTable" >
                             <thead>
                                 <tr>
-                                    <th>Etiquetas</th>
+                                    <th><b>Etiquetas</b></th>
                                     {Parser(this.state.cadenaAnios)} 
-                                    <th>Total General</th>
+                                    <th><b>Total General</b></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {Parser(this.state.miHtml)}                                  
                             </tbody>
+                            <tfoot>
+                                {Parser(this.state.tablaFooter)}                                  
+                            </tfoot>
                         </table>
                 </div>
 
