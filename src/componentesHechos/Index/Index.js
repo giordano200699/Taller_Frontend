@@ -187,9 +187,9 @@ function miFuncion(){
     }else if(opcionGlobal == 3){
         return(<RelacionAlumnos anioIni={AnioIni} anioFin = {AnioFin}/>)
     }else if(opcionGlobal == 4){
-        return(<ProgramaAlumnos />)
+        return(<ProgramaAlumnos  anioIni={AnioIni} anioFin = {AnioFin} />)
     }else{
-        return(<PoblacionEstudiantil />)
+        return(<PoblacionEstudiantil  anioIni={AnioIni} anioFin = {AnioFin} />)
     }
     
 }
