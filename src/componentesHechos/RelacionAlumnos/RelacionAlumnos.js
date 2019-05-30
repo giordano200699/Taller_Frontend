@@ -173,9 +173,9 @@ class RelacionAlumnos extends Component {
                     <Tab label="Tabla">
                         <div class="panel row align-items-center">
                             <div class="panel-heading mt-3 mb-3">
-                                <h4 class="panel-title">Tabla de Relación de Alumnos</h4>
+                                <h4 class="panel-title titulo">Tabla de Relación de Alumnos</h4>
                             </div>
-                            <table className="table table-bordered table-striped col-md-11 mr-md-auto">
+                            <table className="table table-bordered table-striped col-md-11 mr-md-auto greenTable">
                                 <thead>
                                     <tr>
                                         <th>Clave</th>
@@ -193,7 +193,7 @@ class RelacionAlumnos extends Component {
                     <Tab label="Grafico">
                     <div class="panel row align-items-center">
                         <div class="panel-heading mt-3 mb-3">
-                            <h4 class="panel-title">Grafica de Demanda Social</h4>
+                            <h4 class="panel-title titulo">Grafica de Relación de Alumnos</h4>
                         </div>
                         <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
                             <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
@@ -216,9 +216,9 @@ class RelacionAlumnos extends Component {
                 <div style={this.state.esVisible?null:{display:'none'}} id="copia">
                     <div class="panel row align-items-center" style={{marginLeft:80}}>
                         <div class="panel-heading mt-3 mb-3">
-                            <h4 class="panel-title">Tabla de Relación de Alumnos</h4>
+                            <h4 class="panel-title titulo">Tabla de Relación de Alumnos</h4>
                         </div>
-                        <table className="table table-bordered table-striped col-md-11 mr-md-auto">
+                        <table className="table table-bordered table-striped col-md-11 mr-md-auto greenTable">
                             <thead>
                                 <tr>
                                     <th>Clave</th>
@@ -235,7 +235,7 @@ class RelacionAlumnos extends Component {
 
                     <div class="panel row align-items-center"  style={{marginLeft:80}}>
                         <div class="panel-heading mt-3 mb-3">
-                            <h4 class="panel-title">Grafica de Demanda Social</h4>
+                            <h4 class="panel-title titulo">Grafica de Relación de Alumnos</h4>
                         </div>
                         <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
                             <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />

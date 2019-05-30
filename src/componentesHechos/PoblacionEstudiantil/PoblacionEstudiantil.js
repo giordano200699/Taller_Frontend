@@ -142,9 +142,9 @@ class PoblacionEstudiantil extends Component {
                     <Tab label="Tabla">
                         <div class="panel row align-items-center">
                             <div class="panel-heading mt-3 mb-3">
-                                <h4 class="panel-title">Tabla de Población Estudiantil</h4>
+                                <h4 class="panel-title titulo">Tabla de Población Estudiantil</h4>
                             </div>
-                            <table className="table table-bordered table-striped col-md-11 mr-md-auto">
+                            <table className="table table-bordered table-striped col-md-11 mr-md-auto greenTable">
                                 <thead>
                                     {Parser(this.state.miHtml)}  
                                 </thead>
@@ -157,7 +157,7 @@ class PoblacionEstudiantil extends Component {
                     <Tab label="Grafico">
                     <div class="panel row align-items-center">
                         <div class="panel-heading mt-3 mb-3">
-                            <h4 class="panel-title">Grafica de Demanda Social</h4>
+                            <h4 class="panel-title titulo">Grafica de Población Estudiantil</h4>
                         </div>
                         <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
                             <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
@@ -168,7 +168,7 @@ class PoblacionEstudiantil extends Component {
                     <Tab label="Visualizar PDF" >
                         <div className="panel row align-items-center" >
                             <div className="panel-heading mt-3 mb-3">
-                                <h4 style={{marginLeft:60}} className="titulo">Visualizar PDF</h4>
+                                <h4 style={{marginLeft:60}} className="titulo titulo">Visualizar PDF</h4>
                             </div>
                             <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
                                 {this.state.cargoImagen?<Pdf imagen={this.state.imagen}></Pdf>:null}
@@ -182,9 +182,9 @@ class PoblacionEstudiantil extends Component {
                     
                     <div class="panel row align-items-center" style={{marginLeft:80}}>
                         <div class="panel-heading mt-3 mb-3">
-                            <h4 class="panel-title">Tabla de Población Estudiantil</h4>
+                            <h4 class="panel-title titulo">Tabla de Población Estudiantil</h4>
                         </div>
-                        <table className="table table-bordered table-striped col-md-11 mr-md-auto">
+                        <table className="table table-bordered table-striped col-md-11 mr-md-auto greenTable">
                             <thead>
                                 {Parser(this.state.miHtml)}  
                             </thead>
@@ -196,7 +196,7 @@ class PoblacionEstudiantil extends Component {
 
                     <div class="panel row align-items-center" style={{marginLeft:80}}>
                         <div class="panel-heading mt-3 mb-3">
-                            <h4 class="panel-title">Grafica de Demanda Social</h4>
+                            <h4 class="panel-title titulo">Grafica de Población Estudiantil</h4>
                         </div>
                         <div class="panel-body col-md-11 mr-md-auto ml-md-auto">
                             <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />

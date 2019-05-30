@@ -357,7 +357,7 @@ class DemandaSocial extends Component {
                     <div className="panel-heading mt-3 mb-3" >
                         <h2 style={{marginLeft:60}} className="titulo">Gráfica de Demanda Social</h2>
                     </div>
-                    <div className="panel-body col-md-11 mr-md-auto ml-md-auto">
+                    <div className="panel-body col-md-11 mr-md-auto ml-md-auto ">
                         <CanvasJSChart options = {(this.state.isChartLoaded) ? this.state.data : (null)} />
                     </div>           
                 </div>
