@@ -18,6 +18,7 @@ import PDFViewer from '../Pdf/PDFViewer';
 import PDFJs from '../Pdf/backends/pdfjs';
 import WebviewerBackend from '../Pdf/backends/webviewer';
 import html2canvas from 'html2canvas';
+import { Font } from '@react-pdf/renderer';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 var opciones = ({
         title: {
@@ -198,7 +199,8 @@ class DemandaSocial extends Component {
             });
         })
 
-        fetch('http://tallerbackend.herokuapp.com/ApiController/demandaSocial?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        //fetch('http://tallerbackend.herokuapp.com/ApiController/demandaSocial?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
+        fetch('http://localhost/Taller_Backend/ApiController/demandaSocial?fecha_inicio='+this.state.anioini+'&fecha_fin='+this.state.aniofin)//hace el llamado al dominio que se le envió donde retornara respuesta de la funcion
         .then((response)=>{
             return response.json();
         })
@@ -250,21 +252,22 @@ class DemandaSocial extends Component {
             //cadena = cadena + "<td><b>"+totalTotal+"</b></td></tfoot>";
             cadenaFooter = cadenaFooter +  "<td><b>"+totalTotal+"</b></td>";
             
-            //Aqui se llena los datos de la leyenda
-            leyenda += "<hr></hr>"
-            leyenda += "<h5 className='leyenda'><tr><td>ASTI: AUDITORIA Y SEGURIDAD DE TECNOLOGIA DE INFORMACION</td></h5>";
-            leyenda += "<h5 className='leyenda'><tr><td>DISI: DOCTORADO EN INGENIERIA DE SISTEMAS E INFORMATICA</td></h5>";
-            leyenda += "<h5 className='leyenda'><tr><td>GIC: GESTION DE LA INFORMACION Y DEL CONOCIMIENTO</td></h5>";
-            leyenda += "<h5 className='leyenda'><tr><td>GPTI: GERENCIA DE PROYECTOS DE TECNOLOGIA DE INFORMACION</td></h5>";
-            leyenda += "<h5 className='leyenda'><tr><td>GTI: GOBIERNO DE TECNOLOGIAS DE INFORMACION</td></h5>";
-            leyenda += "<h5 className='leyenda'><tr><td>GTIC: GESTION DE TECNOLOGIA DE INFORMACION Y COMUNICACIONES</td></h5>";
-            leyenda += "<h5 className='leyenda'><tr><td>ISW: INGENIERIA DE SOFTWARE</td></h5>";
+            leyenda += "<b>- DISI: </b>" + "DOCTORADO EN INGENIERIA DE SISTEMAS E INFOMARTICA</br>";
+            leyenda += "<b>- GTIC: </b>" + "GESTION DE TECNOLOGIA DE INFORMACION Y COMUNICACIONES</br>";
+            leyenda += "<b>- ISW: </b>" + "INGENIERIA DE SOFTWARE</br>";
+            leyenda += "<b>- GIC: </b>" + "GESTION DE LA INFORMACION Y DEL CONOCIMIENTO</br>";
+            leyenda += "<b>- GTI: </b>" + "GOBIERNO DE TECNOLOGIAS DE INFORMACION</br>";
+            leyenda += "<b>- GPTI: </b>" + "GERENCIA DE PROYECTOS DE TECNOLOGIA DE INFORMACION</br>";
+            leyenda += "<b>- ASTI: </b>" + "AUDITORIA Y SEGURIDAD DE TECNOLOGIA DE INFORMACION</br>";
+            leyenda += "<b>- GPGE: </b>" + "GESTION PUBLICA Y GOBIERNO ELECTRONICO</br>";
+            leyenda += "<b>- DGTI: </b>" + "DIRECCION Y GESTION EN TECNOLOGIA DE INFORMACION</br>";
+            leyenda += "<b>- SATD: </b>" + "SISTEMA DE APOYO A LA TOMA DE DECISIONES</br>";
 
             this.setState({
                 miHtml: cadena,
                 cadenaAnios:cadenaAnios,
-                miLeyenda: leyenda,
                 tablaFooter: cadenaFooter,
+                miLeyenda: leyenda,
                 esVisible:true
             });
             const input = document.getElementById('tabla');
@@ -282,6 +285,36 @@ class DemandaSocial extends Component {
             
             
         })
+
+        /*fetch('http://localhost/Taller_Backend/ApiController/leyendaDemanda') //hace el llamado a la leyenda de demanda social
+        .then((response)=>{
+            return response.json();
+        })
+        .then((result)=>{
+            //result = JSON.parse(result);
+
+            //console.log(result);
+            let leyenda="";
+            let banderita;
+            for(var i in result) {
+                
+                leyenda +="- <b>";
+                banderita = true;
+                for(var j in result[i]){
+                    leyenda += result[i][j] + "</b>";
+                    if(banderita)
+                        leyenda += ": ";
+                    banderita = false;
+                }
+                leyenda += ".<br>"
+            }
+            
+            leyenda += "";
+            this.setState({
+                miLeyenda: leyenda
+            });
+            
+        })*/
 
     }
 
@@ -330,7 +363,8 @@ class DemandaSocial extends Component {
                 <Tab label="Tabla">
                     <div className="panel row align-items-center" style={{paddingLeft:70}}>
                         <div className="panel-heading mt-3 mb-3">
-                            <h5 className="titulo">LEYENDA: {Parser(this.state.miLeyenda)} </h5>
+                            <h5 className="titulo">LEYENDA:</h5>
+                            <h6>{Parser(this.state.miLeyenda)}</h6>
                             <hr></hr>
                             {aI == aF ? (<h4 className="titulo">Tabla de Datos - Demanda Social del año {this.props.anioIni}</h4>) : 
                             (<h4 className="titulo">Tabla de Datos - Demanda Social del {this.props.anioIni} al {this.props.anioFin}</h4>)}
@@ -387,7 +421,9 @@ class DemandaSocial extends Component {
 
 
             <div style={this.state.esVisible?null:{display:'none'}}>
+                
                 <div className="panel row align-items-center" id="tabla" style={{paddingLeft:70}}>
+                <img src='logoPdf.png' style={{width:1100,height:150}}/>
                         <div className="panel-heading mt-3 mb-3">
                             <h5 className="titulo">LEYENDA: {Parser(this.state.miLeyenda)} </h5>
                             <hr></hr>
