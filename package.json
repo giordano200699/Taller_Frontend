@@ -11,7 +11,7 @@
     "@amcharts/amcharts4": "^4.4.1",
     "@amcharts/amcharts4-geodata": "^4.1.4",
     "@react-pdf/renderer": "^1.6.0",
-    "ajv": "^6.5.0",
+    "ajv": "^6.12.3",
     "chart.js": "^2.7.2",
     "fusioncharts": "^3.13.4",
     "html-pdf": "^2.2.0",
